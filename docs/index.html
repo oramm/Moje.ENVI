@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<!--ProjectsList-->
+<html >
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0-beta/css/materialize.min.css">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link href="View/test.css" rel="stylesheet" type="text/css"/>
+    <link rel="shortcut icon" type="image/png" href="/Resources/View/favicon.png"/>
+    
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="Tools.js" type="text/javascript"></script>
+    <script src="View/FormTools.js" type="text/javascript"></script>
+    <script src="View/Popup.js" type="text/javascript"></script>
+    <script src="mainWindowView.js" type="text/javascript"></script>
+    <script src="View/SearchNavigationBar.js" type="text/javascript"></script>
+    <script src="View/NavigationBar.js" type="text/javascript"></script>
+    <script src="MeNavigationBar.js" type="text/javascript"></script>
+    <script src="setup.js" type="text/javascript"></script>
+    <script src="Persons/PersonsSetup.js" type="text/javascript"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0-beta/js/materialize.min.js"></script>
+    <script src="Repository.js" type="text/javascript"></script>
+    <script src="MainController.js" type="text/javascript"></script>
+    
+    <script src="GAuth2.js" type="text/javascript"></script>
+    <title>Moje.ENVI#new</title>
+</head>
+<body>
+
+    
+    <div id="authorize-div" style="display: none"> 
+        <div id="page11" class="container">
+            <div class="row">
+                <H4>Zaloguj się do swojego konta Google</H4>
+                <p>Aby korzystać z witryny Projektu ENVI musisz mieć konto w serwisie Google.</p> 
+            </div>
+        </div>
+        
+    </div>
+
+    <div id="loading" style="display:none"></div>
+    
+    <div id="content" style="display: none">
+        <div id = "tittle"></div>
+        
+        <div id = "form" class="section" style="display: none;">
+            <button id="signout-button">Wyloguj</button>
+        </div>
+        
+        <div class="row">
+            <div class="col s12 m12 l12"><iframe height="615px" width="100%" id="iframeMain"></iframe></div>
+        </div>
+    </div>
+    <footer class="page-footer green darken-2">
+
+        <div class="footer-copyright green darken-2">
+            <div class="container">
+            © ENVI KONSULTING 2018, Moje ENVI v. 0.0.0 alpha
+            <a class="grey-text text-lighten-4 right" href="http://www.envi.com.pl">www.envi.com.pl</a>
+            </div>
+        </div>
+        </footer>
+<script async defer src="https://apis.google.com/js/api.js"
+    onload="this.onload=function(){}; gAuth = new GAuth2();   gAuth.handleClientLoadMainWindow()"
+    onreadystatechange="if (this.readyState === 'complete') this.onload()">
+</script>   
+</body>
+</html>
