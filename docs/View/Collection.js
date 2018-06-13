@@ -60,36 +60,39 @@ class Collection {
      * @returns {Promise}
      */
     addNewHandler(status, item, errorMessage){
-        return new Promise((resolve, reject) => {
+        //return new Promise((resolve, reject) => {
             switch (status) {
                 case "DONE":
-                    this.$collection.children(':last-child').children('.progress').remove();
-                    this.$collection.children(':last-child').attr('id',item.id);
+                    this.$collection.children('#' + item.tmpId).children('.progress').remove();
+                    this.$collection.children('#' + item.tmpId).attr('id',item.id);
                     //.$('#preloader'+item.id).remove();
                     if (this.$editModal !== undefined) this.setEditAction();
                     if (this.isDeletable) this.setRemoveAction();
                     if (this.isSelectable) this.setSelectAction();
                     this.items.push(item);
+                    return status;
                     break;
                 case "PENDING":  
                     if (this.items.length == 0) {
                         this.$dom.find('.emptyList').remove();
                     }
-                    this.$dom.find('ul:first').append(this.buildRow(item));
+                    item.id = this.items.length+1 + '_pending';
+                    this.$collection.prepend(this.buildRow(item));
                     this.$dom.find('#' + item.id).append(this.makePreloader('preloader'+item.id))
+                    return item.id;
                     break;
                 case "ERROR":
                     alert(errorMessage);
-                    this.$dom.find('#' + item.id).remove();
+                    this.$dom.find('#' + item.tmpId).remove();
                     //$('#preloader'+item.id).remove();
                     if (this.items.length == 0) {
                         this.$dom.prepend(this.$emptyList);
                     }
-
+                    return status;
                     break;
                 }
-            resolve(status)
-        });
+            
+        //});
     }
     
     /*

@@ -11,8 +11,7 @@ class ExternalAchievementsCollection extends SimpleCollection {
     makeItem(dataItem){
         return {    id: dataItem.id,
                         icon:   'person',
-                        title:  dataItem.ownerNameSurname + ' | ' + 
-                                dataItem.ownerEmail + ': ' +
+                        title:  dataItem.ownerNameSurnameEmail + ' | ' + 
                                 dataItem.roleName,
                         description:    '<br>' + 
                                         'Wartość robót: <b>' + new Intl.NumberFormat('pl-PL', { style: 'currency', currency: 'PLN' }).format(dataItem.worksValue) + '</b><BR>' +

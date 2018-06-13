@@ -97,7 +97,7 @@ class Repository {
     //wywoływana przy SUBMIT
     addNewItem(newItem, serverFunctionName, viewObject) {
         return new Promise((resolve, reject) => {
-            viewObject.addNewHandler.apply(viewObject,["PENDING",newItem]);
+            newItem.tmpId = viewObject.addNewHandler.apply(viewObject,["PENDING",newItem]);
             // Create an execution request object.
             // Create execution request.
             var request = {

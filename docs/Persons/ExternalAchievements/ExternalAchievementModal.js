@@ -30,19 +30,22 @@ class ExternalAchievementModal extends Modal {
                                                                      'person', 
                                                                      true, 
                                                                      'Wybierz imię i nazwisko')
-        this.ownerAutoCompleteTextField.initialise(personsRepository,"nameSurname", this.onOwnerChosen, this);
-        this.roleSelectField = new SelectField('roleSelectField', 'Pełniona rola', true);
+        this.ownerAutoCompleteTextField.initialise(personsRepository,"nameSurnameEmail", this.onOwnerChosen, this);
+        this.roleSelectField = new SelectField(this.id + 'roleSelectField', 'Pełniona rola', true);
         this.roleSelectField.initialise(this.roleNames);
-        this.startDatePicker = new DatePicker('startDatePickerField','Początek', true);
+        this.startDatePicker = new DatePicker(this.id + 'startDatePickerField','Początek', true);
+        this.endDatePicker = new DatePicker(this.id + 'endDatePickerField','Koniec', true);
         
         this.$formElements = [
             this.ownerAutoCompleteTextField.$dom,
             this.roleSelectField.$dom,
-            FormTools.createInputField('descriptionTextField','Opis doświadczenia', true, 20),
-            FormTools.createInputField('worksScopeTextField','Zakres robót', true, 20),
-            FormTools.createInputField('worksValueTextField','Wartość obsługiwanych robót', true, 20),
-            FormTools.createInputField('projectValueTextField','Wartość całego projektu', true, 20),
+            FormTools.createInputField(this.id + 'descriptionTextField','Opis doświadczenia', true, 300),
+            FormTools.createInputField(this.id + 'worksScopeTextField','Zakres robót', true, 2000),
+            FormTools.createInputField(this.id + 'worksValueTextField','Wartość obsługiwanych robót', true, 20),
+            FormTools.createInputField(this.id + 'projectValueTextField','Wartość całego projektu', true, 20),
             this.startDatePicker.$dom,
+            this.endDatePicker.$dom,
+            FormTools.createInputField(this.id + 'employerTextField','Zamawiający', true, 300),
             FormTools.createSubmitButton("Przypisz")
         ];
         
@@ -51,16 +54,15 @@ class ExternalAchievementModal extends Modal {
 
     }
     fillWithData(){
-        this.ownerAutoCompleteTextField.setChosenItem(externalAchievementsRepository.currentItem.ownerNameSurname);
+        this.ownerAutoCompleteTextField.setChosenItem(externalAchievementsRepository.currentItem.ownerNameSurnameEmail);
         this.roleSelectField.setChosenItem(externalAchievementsRepository.currentItem.roleName);
-
         this.$formElements[2].children('input').val(externalAchievementsRepository.currentItem.description);
         this.$formElements[3].children('input').val(externalAchievementsRepository.currentItem.worksScope);
         this.$formElements[4].children('input').val(externalAchievementsRepository.currentItem.worksValue);
         this.$formElements[5].children('input').val(externalAchievementsRepository.currentItem.projectValue);
         this.startDatePicker.setChosenDate(externalAchievementsRepository.currentItem.startDate);
-        //this.$formElements[6].children('input').val(externalAchievementsRepository.currentItem.startDate);
-        this.$formElements[7].children('input').val(externalAchievementsRepository.currentItem.endDate);
+        this.endDatePicker.setChosenDate(externalAchievementsRepository.currentItem.endDate);
+        this.$formElements[8].children('input').val(externalAchievementsRepository.currentItem.employer);
 
     }
         
@@ -72,19 +74,18 @@ class ExternalAchievementModal extends Modal {
     */
     submitTrigger(){
         this.dataObject = { id: externalAchievementsRepository.currentItem.id, //używane tylko przy edycji
-                            ownerId: this.entityAutocompleteTextField.chosenItem.id,
-                            roleName: $('#' + this.id + 'roleNameTextField option:selected').val(),
+                            ownerId: this.ownerAutoCompleteTextField.chosenItem.id,
+                            ownerNameSurnameEmail: this.ownerAutoCompleteTextField.chosenItem.nameSurnameEmail,
+                            roleName: this.$formElements[1].find('input').val(),
                             description: $('#'+this.id + 'descriptionTextField').val(),
-                            worksScope: $('#' + this.id + 'worksScopeTextField').val()
-                            
-                            //position: $('#' + this.id + 'positionTextField').val(),
-                            //email: $('#' + this.id + 'emailTextField').val(),
-                            //cellphone: $('#' + this.id + 'cellphoneTextField').val(),
-                            //phone: $('#' + this.id + 'phoneTextField').val(),
-                            //comment: $('#' + this.id + 'commentTextField').val()
-
+                            worksScope: $('#' + this.id + 'worksScopeTextField').val(),
+                            worksValue: $('#' + this.id + 'worksValueTextField').val(),
+                            projectValue: $('#' + this.id + 'projectValueTextField').val(),
+                            startDate: $('#' + this.id + 'startDatePickerField').val(),
+                            endDate: $('#' + this.id + 'endDatePickerField').val(),
+                            employer: $('#' + this.id + 'employerTextField').val()
                           };
-        personsRepository.setCurrentItem(this.dataObject);
+        externalAchievementsRepository.setCurrentItem(this.dataObject);
     }
     
 };

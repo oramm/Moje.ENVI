@@ -21,7 +21,8 @@ class SimpleCollection extends Collection {
     */
     addNewHandler(status, dataItem, errorMessage){                                 
         var collectionItem = this.makeItem(dataItem);
-        super.addNewHandler(status, collectionItem, errorMessage);            
+        collectionItem.tmpId = dataItem.tmpId;
+        return super.addNewHandler(status, collectionItem, errorMessage);
     } 
     
         /*

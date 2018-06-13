@@ -20,6 +20,9 @@ class MeNavigationBar extends NavigationBar {
                           },
                           { caption: "Doświadczenie osób", 
                             link: 'Persons/ExternalAchievements/externalAchievements.html'
+                          },
+                          { caption: "Witryna projektów", 
+                            link: 'https://ps.envi.com.pl/'
                           }
                          ];
         this.addMenuItems($('#main-nav ul'));
@@ -27,6 +30,9 @@ class MeNavigationBar extends NavigationBar {
     }
       
     menuItemClickHandler(link){
-        this.parentViewObject.loadIframe("iframeMain", link);
+        if (link.includes('http'))
+            window.open(link, 'link');
+        else
+            this.parentViewObject.loadIframe("iframeMain", link);
     }
 }

@@ -8,9 +8,9 @@ class ExternalAchievementsController {
         
         externalAchievementsRepository = new SimpleRepository('ExternalAchievements repository',
                                                  'getExternalAchievementsList',
-                                                 'addxternalAchievementInDb',
-                                                 'editxternalAchievementInDb',
-                                                 'deletexternalAchievement');
+                                                 'addNewExternalAchievementInDb',
+                                                 'editExternalAchievementInDb',
+                                                 'deleteExternalAchievement');
         personsRepository = new SimpleRepository('Persons repository',
                                                  'getPersonsNameSurnameEmailList',
                                                  'addNewPersonInDb',
