@@ -1,7 +1,7 @@
 class NewExternalAchievementModal extends ExternalAchievementModal {
     constructor(id, tittle, connectedResultsetComponent){
         super(id, tittle, connectedResultsetComponent);
-        this.fillWithTestData();
+        //this.fillWithTestData();
         
 
     }

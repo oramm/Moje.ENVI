@@ -23,7 +23,7 @@ class ExternalAchievementsController {
         
         Promise.all(promises)
             .then((res)=>  {   console.log(res); 
-                               externalAchievementsView.initialise()
+                               externalAchievementsView.initialise();
                             })
             .then(  ()=>{$('select').material_select();
                     $('.datepicker').pickadate({
