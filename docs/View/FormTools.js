@@ -134,6 +134,161 @@ class SelectField{
         this.$dom.find('li:nth-child('+itemSelectedId+')').click();
         this.chosenItem = inputValue;
     }
+} 
+
+class ReachTextArea {
+    constructor(id, label, isRequired, maxCharacters){
+        this.id = id;
+        this.label = label;
+        this.isRequired = isRequired;
+        this.maxCharacters = maxCharacters;
+        this.$dom = this.createReachTextArea();
+    }
+    /*
+     * Używać w klasie XxxxController po XxxxView.initilise()
+     */
+    static reachTextAreaInit(){
+        tinymce.init({  selector: '.reachTextArea',
+                        toolbar: 'undo redo | bold italic underline | outdent indent | link',
+                        menubar: false,
+                        forced_root_block : false,
+                        statusbar: true,
+                        plugins: "autoresize link",
+                        autoresize_bottom_margin: 20,
+                        autoresize_min_height: 30,
+                        max_chars: 30,
+                        branding: false,
+                        setup: function (ed) {
+                            var allowedKeys = [8, 37, 38, 39, 40, 46]; // backspace, delete and cursor keys
+                            ed.on('keydown', function (e) {
+                                if (allowedKeys.indexOf(e.keyCode) != -1) return true;
+                                var maxCharacters = $(tinyMCE.get(tinyMCE.activeEditor.id).getElement()).attr('max_chars');
+                                if ( $(ed.getBody()).text().length+1 > maxCharacters){
+                                //if (ReachTextArea.tinymce_getContentLength() + 1 > this.settings.max_chars) {
+                                    e.preventDefault();
+                                    e.stopPropagation();
+                                    return false;
+                                }
+                                return true;
+                            });
+                            ed.on('keyup', function (e) {
+                                var maxCharacters = $(tinyMCE.get(tinyMCE.activeEditor.id).getElement()).attr('max_chars');
+                                ReachTextArea.tinymce_updateCharCounter(this, ReachTextArea.tinymce_getContentLength(),maxCharacters);
+                            });
+                        },
+                        init_instance_callback: function () { // initialize counter div
+                            var maxCharacters = $(tinyMCE.get(tinyMCE.activeEditor.id).getElement()).attr('max_chars');
+                            $('#' + this.id).prev().append('<div class="char_count" style="text-align:right"></div>');
+                            ReachTextArea.tinymce_updateCharCounter(this, ReachTextArea.tinymce_getContentLength(), maxCharacters);
+                        },
+                        paste_preprocess: function (plugin, args) {
+                            var maxCharacters = $(tinyMCE.get(tinyMCE.activeEditor.id).getElement()).attr('max_chars');
+                            var editor = tinymce.get(tinymce.activeEditor.id);
+                            var len = editor.contentDocument.body.innerHTML.length;
+                            var text = $(args.content).text();
+                            if (len + text.length > editor.settings.max_chars) {
+                                alert('Pasting this exceeds the maximum allowed number of ' + editor.settings.max_chars + ' characters.');
+                                args.content = '';
+                            } else {
+                                ReachTextArea.tinymce_updateCharCounter(editor, len + text.length, maxCharacters);
+                            }
+                        }
+                    });
+    }
+    
+    static tinymce_updateCharCounter(el, len, maxCharacters) {
+        $('#' + el.id).prev().find('.char_count').text(len + '/' + maxCharacters);
+    }
+
+    static tinymce_getContentLength() {
+        return tinymce.get(tinymce.activeEditor.id).contentDocument.body.innerHTML.length;
+    }
+    
+    /*
+     * Używać w klasie z formularzem (XxxxModal)
+     * w funkcji fillWithData() użyć:
+     *      tinyMCE.get(this.id + 'descriptionTextField').setContent(rolesRepository.currentItem.description);
+     *      tinyMCE.triggerSave();
+     */
+    createReachTextArea(){
+        var $textArea;
+        $textArea = FormTools.createTextArea(this.id, this.label, this.isRequired);
+        $textArea.children('textarea')
+                .addClass('reachTextArea')
+                .attr('max_chars',this.maxCharacters);
+        return $textArea;
+    }
+}
+
+class SelectFieldBrowserDefault{
+    /*
+     * Sposób użycia: tworzymy nowy obiekt >> initialise >> w kontrolerze po zbudowaniu DOM >> ()=>{$('select').material_select();
+     * @param {type} id
+     * @param {type} label
+     * @param {type} icon
+     * @param {type} isRequired
+     * @returns {SelectField}
+     */
+    constructor(id, label, icon, isRequired){
+        this.id = id;
+        this.label = label;
+        this.icon = icon;
+        this.isRequired = isRequired;
+        this.chosenItem;
+        this.$dom;
+        this.$select;
+        this.createSelectField(id, label, icon, isRequired);
+    }
+    
+    initialise(optionsData){
+        this.$select.empty();
+        if (optionsData===undefined) 
+            optionsData = this.optionsData;
+        else
+            this.optionsData = optionsData;
+        
+        this.$select.append('<option value="" disabled selected>Wybierz opcję</option>')
+        for (var i in optionsData){
+            var $option = $('<option>')
+                                .val(optionsData[i].name)
+                                .text(optionsData[i].name);
+            this.$select.append($option);
+        }
+        this.setChangeAction();
+        
+    }
+    
+    createSelectField(id, label, icon, isRequired, options){
+        
+        this.$select = $('<select class="browser-default">');
+        this.$dom = $('<div>');
+        var $label = $('<label>'+ label +'</label>');
+        
+        this.$dom
+            .append($label)
+            .append(this.$select)
+          
+        //if (isRequired)
+        //    $select.attr('required','true')
+        return this.$dom;
+    }
+    //uruchamiana na click
+    setChosenItem(inputValue){
+        this.chosenItem = search(inputValue, 'name', this.optionsData);
+    }
+    
+    setChangeAction(){
+        var _this=this;
+        this.$select.change(function(){ _this.setChosenItem($(this).val());
+                                      });
+    }
+    simulateChosenItem(inputValue){
+        this.setChosenItem(inputValue);
+        var itemSelectedId = this.optionsData.findIndex(x => x.hello === inputValue);
+        //var itemSelectedId = 2 + this.optionsData.indexOf(inputValue);
+        this.$dom.find('li:nth-child('+itemSelectedId+')').click();
+        
+    }
 }
 
 class DatePicker {
@@ -257,6 +412,30 @@ class FormTools{
         });
         
         return $textField;
+    }
+    
+    static createTextArea(id, label, isRequired, maxCharacters, dataError){
+        var $textArea = $('<div class="input-field">');
+        var $input = $('<textarea class="materialize-textarea validate" id="' + id + '" name="' + id + '">');
+        var $label = $('<label for="'+ id +'">'+ label +'</label>');
+        $textArea
+            .append($input)
+            .append($label);
+        if (isRequired)
+            $input.attr('required','true')
+      
+        if (maxCharacters >0){
+            $input
+                .attr('data-length', maxCharacters);
+            $input.characterCounter();
+        }
+
+        if (dataError !== undefined) 
+            $label.attr('data-error',dataError)
+        else
+            $label.attr('data-error','Wpisany tekst jest za długi')
+        
+        return $textArea;
     }
 
     static createFlatButton(caption, onClickFunction){

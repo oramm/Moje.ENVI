@@ -36,7 +36,8 @@ class ExternalAchievementsController {
                         container: undefined, // ex. 'body' will append picker to body
                         format: 'dd-mm-yyyy'
                     });
-                 })
+                    ReachTextArea.reachTextAreaInit();
+                })
             .catch(err => {
                   console.error(err);
                 });

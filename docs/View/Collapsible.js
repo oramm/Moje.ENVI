@@ -57,7 +57,8 @@ class Collapsible {
     
     filterInitialise(){
         this.$actionsMenu.append(FormTools.createFilterInputField("contract-filter",
-                                                                  this.$collapsible.children('li'))
+                                                                  this.$collapsible.children('li'),
+                                                                  "Znajdź " + this.itemsName)
                                 );
     }
     /*
