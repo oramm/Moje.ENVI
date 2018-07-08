@@ -2,21 +2,27 @@
  * http://materializecss.com/collapsible.html
  */
 class Collapsible {
-    constructor(itemsName){
+    constructor(id, itemsName){
+        this.id = id;
         this.itemsName = itemsName;
         this.$dom;
         this.$collapsible;
         this.$actionsMenu;
     }
     
-    initialise(id, items, parentViewObject, parentViewObjectSelectHandler){
-        this.id = id;
+    initialise(items, parentViewObject, parentViewObjectSelectHandler){
         this.items = items;
         this.parentViewObject = parentViewObject;
         this.parentViewObjectSelectHandler = parentViewObjectSelectHandler;
+        
+        this.isDeletable = true;
+        this.isEditable = (this.$editModal !== undefined)? true : false;
+        this.isSelectable = true;
+        
         this.buildDom();
         this.actionsMenuInitialise();
-        Tools.hasFunction(this.addNewHandler);
+
+        Tools.hasFunction(this.makeItem);
     }
     
     buildDom(){
@@ -37,18 +43,24 @@ class Collapsible {
         }
         this.$collapsible.collapsible();//inicjacja wg instrukcji materialisecss
         
-        if (this.parentViewObjectRemoveHandler !== undefined)
-            this.setRemoveAction();
-        if (this.parentViewObjectSelectHandler !== undefined)
-            this.setClickAction();
-
+        if (this.isEditable) this.setEditAction();
+        if (this.isDeletable) this.setDeleteAction();
+        if (this.isSelectable) this.setSelectAction();
     }
-    
+    /*
+     * Tworzy element listy
+     * @param {type} item - to gotowy item dla Collapsible (na podstawie surowych danych w repozytorium)s 
+     * @returns {Collapsible.buildRow.$row|$}
+     */
     buildRow(item){
         var $row = $('<li>');
+        
         $row
-                .append('<div class="collapsible-header"><i class="material-icons">filter_list</i>'+ item.name +'</div>')
-                .append('<div class="collapsible-body">');
+            .append('<div class="collapsible-header"><i class="material-icons">filter_list</i>'+ item.name)
+            .append('<div class="collapsible-body">');
+        $row.children('.collapsible-header').attr('itemId', item.id);
+                
+            
        (item.$body!==undefined)? $row.children(':last').append(item.$body) : $row.children(':last').append('lista jest pusta');
         
         return $row;
@@ -63,27 +75,47 @@ class Collapsible {
     }
     /*
      * Klasa pochodna musi mieć zadeklarowaną metodę addNewHandler()
+     * do usunięcia
      */
     actionsMenuInitialise(){
-        var newItemButton = FormTools.createFlatButton('Dodaj '+ this.itemsName, this.addNewHandler);
-        this.$actionsMenu.append(newItemButton);
+        //do usunięcia ten if
+        if (this.addNewHandler !== undefined){
+            var newItemButton = FormTools.createFlatButton('Dodaj '+ this.itemsName, this.addNewHandler);
+            this.$actionsMenu.append(newItemButton);
+        }
+        
+        if (this.$addNewModal !== undefined)
+            this.$addNewModal.preppendTriggerButtonTo(this.$actionsMenu,"Dodaj wpis");
         this.filterInitialise();
 
     }
     
-    setClickAction(){
+    setSelectAction(){
         var _this = this;
-        this.$dom.find(".collapsible > li").click(function() {   
-                                            _this.$dom.find(".collapsible > li").attr("class", "collection-item avatar");
-                                            $(this).attr("class", "collection-item avatar active");
-                                            _this.parentViewObjectSelectHandler.apply(_this.parentViewObject,[$(this).attr("id")]);
+        this.$dom.find(".collapsible-header").click(function() {   
+                                            _this.selectTrigger($(this).attr("itemId"));
+                                            //_this.parentViewObjectSelectHandler.apply(_this.parentViewObject,[$(this).attr("id")]);
                                         });
     }
     
-    setRemoveAction(){
+    /*
+     * Klasa pochodna musi mieć zadeklarowaną metodę removeTrigger()
+     */
+    setDeleteAction(){
+        this.$dom.find(".itemDelete").off('click');
         var _this = this;
         this.$dom.find(".itemDelete").click(function() {   
-                                            _this.parentViewObjectRemoveHandler.apply(_this.parentViewObject,[$(this).parent().parent().parent().parent().attr("id")]);
+                                        _this.removeTrigger($(this).parent().parent().parent().parent().attr("id"));   
+                                        });
+    }
+    
+    setEditAction(){
+        this.$dom.find(".itemEdit").off('click');
+        var _this = this;
+        this.$dom.find(".itemEdit").click(function() { 
+                                        $(this).parent().parent().parent().parent().trigger('click');
+                                        _this.$editModal.fillWithData();
+                                        Materialize.updateTextFields();
                                         });
     }
 }

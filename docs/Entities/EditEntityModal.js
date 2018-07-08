@@ -20,8 +20,7 @@ class EditEntityModal extends EntityModal {
     }
     
     wasChanged(entity){
-        var check = entitiesRepository.items.find( item => item.name == entity.name && 
-                                                                item.taxNumber == item.taxNumber
+        var check = entitiesRepository.items.find( item => Tools.areEqualObjects(item, entity)
                                                       )   
         return (check === undefined)? true : false;
     }

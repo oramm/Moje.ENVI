@@ -5,9 +5,7 @@ class Collection {
     constructor(id){
         this.id = id;
         
-        this.isDeletable = true;
-        //this.isEditable = true;
-        this.isSelectable = true;
+        
         this.$dom;
         this.$actionsMenu;
         this.$emptyList = $('<H4 class="emptyList">Lista jest pusta</H4>');
@@ -19,6 +17,10 @@ class Collection {
         //this.parentViewObjectSelectHandler = parentViewObjectSelectHandler;
         //this.parentViewObject = parentViewObject;
         
+        this.isDeletable = true;
+        this.isEditable = (this.$editModal !== undefined)? true : false;
+        this.isSelectable = true;
+
         this.buildDom();
         if (this.items.length === 0) {           
             this.$dom 
@@ -28,7 +30,7 @@ class Collection {
         
         this.actionsMenuInitialise();
         
-        Tools.hasFunction(this.addNewHandler);
+        //Tools.hasFunction(this.addNewHandler);
         Tools.hasFunction(this.makeItem);
     }
     
@@ -47,8 +49,8 @@ class Collection {
             this.$collection.append($row);
         }
         
-        if (this.$editModal !== undefined) this.setEditAction();
-        if (this.isDeletable) this.setRemoveAction();
+        if (this.isEditable) this.setEditAction();
+        if (this.isDeletable) this.setDeleteAction();
         if (this.isSelectable) this.setSelectAction();
     }
     
@@ -67,7 +69,7 @@ class Collection {
                     this.$collection.children('#' + item.tmpId).attr('id',item.id);
                     //.$('#preloader'+item.id).remove();
                     if (this.$editModal !== undefined) this.setEditAction();
-                    if (this.isDeletable) this.setRemoveAction();
+                    if (this.isDeletable) this.setDeleteAction();
                     if (this.isSelectable) this.setSelectAction();
                     this.items.push(item);
                     return status;
@@ -112,7 +114,7 @@ class Collection {
                     this.setEditAction();
                     var $oldRow = this.$collection.find('#' + item.id + '_toDelete');
                     $oldRow.remove();
-                    if (this.isDeletable) this.setRemoveAction();
+                    if (this.isDeletable) this.setDeleteAction();
                     if (this.isSelectable) this.setSelectAction();
                     break;
                 case "PENDING":  
@@ -176,7 +178,7 @@ class Collection {
     /*
      * Klasa pochodna musi mieć zadeklarowaną metodę removeTrigger()
      */
-    setRemoveAction(){
+    setDeleteAction(){
         this.$dom.find(".itemDelete").off('click');
         var _this = this;
         this.$dom.find(".itemDelete").click(function() {   
@@ -187,10 +189,12 @@ class Collection {
     setEditAction(){
         this.$dom.find(".itemEdit").off('click');
         var _this = this;
-        this.$dom.find(".itemEdit").click(function() { 
+        this.$dom.find(".itemEdit").click(function(e) { 
                                         $(this).parent().parent().parent().parent().trigger('click');
                                         _this.$editModal.fillWithData();
                                         Materialize.updateTextFields();
+                                        //e.stopPropagation();
+                                        //e.preventDefault();
                                         });
     }
     //-------------------------------------- funkcje prywatne -----------------------------------------------------
@@ -212,9 +216,7 @@ class Collection {
                                                                   this.$collection.children('li'))
                                 );
     }
-    /*
-     * Klasa pochodna musi mieć zadeklarowaną metodę addNewHandler()
-     */
+
     actionsMenuInitialise(){
         //var newItemButton = FormTools.createFlatButton('Dodaj '+ this.itemsName, this.addNewHandler);
         //this.$actionsMenu.append(newItemButton);

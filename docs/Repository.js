@@ -18,7 +18,7 @@ class Repository {
     itemSelected(id) {
         if (id === undefined) throw new SyntaxError("Selected item id must be specified!");
         this.selectedItemId = id;
-        this.selectedItem = Tools.search(parseInt(id),"id", this.items);
+        this.currentItem = Tools.search(parseInt(id),"id", this.items);
         
     }
 
@@ -152,7 +152,7 @@ class Repository {
                 // 'errorType', and an array of stack trace elements.
                 var error = resp.error.details[0];
                 this.result = 'Script error message: ' + error.errorMessage;
-                console.error(resp.error);
+                throw resp.error.details[0].errorMessage;
                 if (error.scriptStackTraceElements) {
                     // There may not be a stacktrace if the script didn't start
                     // executing.

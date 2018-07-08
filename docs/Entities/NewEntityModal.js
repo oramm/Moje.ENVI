@@ -1,7 +1,7 @@
 class NewEntityModal extends EntityModal {
     constructor(id, tittle, connectedResultsetComponent){
         super(id, tittle, connectedResultsetComponent);
-        this.fillWithTestData();
+        //this.fillWithTestData();
 
     }
         
@@ -20,7 +20,7 @@ class NewEntityModal extends EntityModal {
         }
     }
     
-    isReallyNew(person){
+    isReallyNew(entity){
         var isReallyNew = entitiesRepository.items.find( item => item.name == entity.name && 
                                                                 item.taxNumber == item.taxNumber
                                                       )   
