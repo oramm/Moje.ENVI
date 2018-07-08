@@ -9,6 +9,11 @@ class EntitiesCollection extends SimpleCollection {
     }
     
     makeItem(dataItem){
+        (dataItem.address)? true : dataItem.address="";
+        (dataItem.taxNumber)? true : dataItem.taxNumber="";
+        (dataItem.www)? true : dataItem.www="";
+        (dataItem.www)? true : dataItem.www="";
+        (dataItem.email)? true : dataItem.email="";
         return {    id: dataItem.id,
                         icon:   'business_center',
                         title:  dataItem.name + ' <BR>' + 
