@@ -14,6 +14,7 @@ class ExternalAchievementsCollection extends SimpleCollection {
                         title:  dataItem.ownerNameSurnameEmail + ' | ' + 
                                 dataItem.roleName,
                         description:    '<br>' + 
+                                        'Zamawiający :' + dataItem.employer + '<br>' + 
                                         'Wartość robót: <b>' + new Intl.NumberFormat('pl-PL', { style: 'currency', currency: 'PLN' }).format(dataItem.worksValue) + '</b><BR>' +
                                         'Wartość projektu: <b>' + new Intl.NumberFormat('pl-PL', { style: 'currency', currency: 'PLN' }).format(dataItem.projectValue) + '</b><BR>' +
                                         '<b>' + dataItem.startDate + ' - ' +
