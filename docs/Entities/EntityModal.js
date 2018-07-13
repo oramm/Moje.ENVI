@@ -2,13 +2,13 @@ class EntityModal extends Modal {
     constructor(id, tittle, connectedResultsetComponent, connectedResultsetComponentAddNewHandler){
         super(id, tittle, connectedResultsetComponent, connectedResultsetComponentAddNewHandler);
         this.$formElements = [
-            FormTools.createInputField(this.id+'nameTextField','Nazwa', true, 20, '.{3,}'),
-            FormTools.createInputField(this.id+'addressTextField','Adres', false, 20, '.{3,}'),
-            FormTools.createInputField(this.id+'taxNumberTextField','NIP', false, 20),
-            FormTools.createInputField(this.id+'wwwTextField','Strona www', false, 20, '.{3,}'),
-            FormTools.createEmailInputField(this.id+'emailTextField','E-mail', false, 20, '.{3,}'),
-            FormTools.createInputField(this.id+'phoneTextField','Tel.', false, 20, '.{3,}'),
-            FormTools.createInputField(this.id+'faxTextField','Fax', false, 20, '.{3,}'),
+            FormTools.createInputField(this.id+'nameTextField','Nazwa', true, 150, '.{3,}'),
+            FormTools.createInputField(this.id+'addressTextField','Adres', false, 250, '.{3,}'),
+            FormTools.createInputField(this.id+'taxNumberTextField','NIP', false, 13, '([0-9]{3})(-|)([0-9]{3})(-|)([0-9]{2})(-|)([0-9]{2})'),
+            FormTools.createInputField(this.id+'wwwTextField','Strona www', false, 150, '.{3,}'),
+            FormTools.createEmailInputField(this.id+'emailTextField','E-mail', false, 80, '.{3,}'),
+            FormTools.createInputField(this.id+'phoneTextField','Tel.', false, 25, '.{3,}'),
+            FormTools.createInputField(this.id+'faxTextField','Fax', false, 25, '.{3,}'),
             FormTools.createSubmitButton("Zapisz")
         ];
         this.initialise();
