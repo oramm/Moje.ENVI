@@ -9,16 +9,20 @@ class EntitiesCollection extends SimpleCollection {
     }
     
     makeItem(dataItem){
+        dataItem.taxNumber = (dataItem.taxNumber)? dataItem.taxNumber : "";
+        var taxNumberLabel = (dataItem.taxNumber)? 'NIP: ' + dataItem.taxNumber + '<BR>' : "";
+        
         (dataItem.address)? true : dataItem.address="";
-        dataItem.taxNumber = (dataItem.taxNumber)? 'NIP: ' + dataItem.taxNumber : "";
-        (dataItem.www)? true : dataItem.www="";
+        var addressLabel = (dataItem.address)? (dataItem.address)  + '<BR>': "";
+        
         (dataItem.www)? true : dataItem.www="";
         (dataItem.email)? true : dataItem.email="";
+        
         return {    id: dataItem.id,
                         icon:   'business_center',
                         title:  dataItem.name + ' <BR>' + 
-                                dataItem.address + '<BR>',
-                        description:    dataItem.taxNumber + ' <BR>' +
+                                addressLabel,
+                        description:    taxNumberLabel +
                                         '<a href="'+ dataItem.www + 'target="_blank">' +dataItem.www + '</a> ' +
                                         '<a href="mailto:'+ dataItem.email +'">' + dataItem.email + '</a>'
                 };

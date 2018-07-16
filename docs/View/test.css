@@ -3,6 +3,15 @@ iframe {
     border:0;
 }
 
+.collapsible-header i {
+width: 2rem;
+font-size: 1.6rem;
+line-height: 3rem;
+display: block;
+float: left;
+text-align: center;
+margin-right: 1rem;
+}
 
 body {
     display: flex;
