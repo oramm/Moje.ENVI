@@ -142,7 +142,7 @@ class ReachTextArea {
         this.label = label;
         this.isRequired = isRequired;
         this.maxCharacters = maxCharacters;
-        this.$dom = this.createReachTextArea();
+        this.createReachTextArea();
     }
     /*
      * Używać w klasie XxxxController po XxxxView.initilise()
@@ -211,12 +211,22 @@ class ReachTextArea {
      *      tinyMCE.triggerSave();
      */
     createReachTextArea(){
-        var $textArea;
-        $textArea = FormTools.createTextArea(this.id, this.label, this.isRequired);
-        $textArea.children('textarea')
-                .addClass('reachTextArea')
-                .attr('max_chars',this.maxCharacters);
-        return $textArea;
+        //var $textArea;
+        //$textArea = FormTools.createTextArea(this.id, this.label, this.isRequired);
+        this.$dom = $('<div>');
+        
+        var $label = $('<label>'+ this.label +'</label>');
+        var $textArea = $('<div class="input-field reachTextArea">');
+        $textArea
+            .attr('max_chars',this.maxCharacters);
+        //var $input = $('<textarea id="' + this.id + '" name="' + this.id + '">');
+        //$textArea
+        //    .append($input);
+        this.$dom
+            .append($label)
+            .append($textArea);
+    
+        
     }
 }
 
@@ -319,6 +329,16 @@ class DatePicker {
         // Use the picker object directly.
         var picker = $generatedInput.pickadate('picker')
         picker.set('select', date, { format: 'yyyy-mm-dd' })
+    }
+    
+    checkDate() {
+        var test = $('#' + this.id).val() != '';
+        if (test === false) {
+            this.$input.addClass('invalid');
+        } else {
+            this.$input.removeClass('invalid');
+        }
+        return test;
     }
 }
 
@@ -466,4 +486,3 @@ class FormTools{
         $input.appendTo(parentNode);
     }
 }
-
