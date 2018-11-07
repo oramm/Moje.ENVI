@@ -4,7 +4,7 @@ class ExternalAchievementsView extends Popup {
     }
     initialise(){
         return new Promise((resolve, reject) => {
-            this.externalAchievementsCollection = new ExternalAchievementsCollection('externalAchievementsCollection');
+            this.externalAchievementsCollection = new ExternalAchievementsCollection({id: 'externalAchievementsCollection'});
             this.setTittle("Doświadczenie spoza ENVI");
 
             $('#actionsMenu').after(this.externalAchievementsCollection.$dom);

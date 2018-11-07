@@ -9,19 +9,25 @@ class SimpleRepository extends Repository {
         this.addNewServerFunctionName = addNewServerFunctionName;
         this.editServerFunctionName = editServerFunctionName;
         this.deleteServerFunctionName = deleteServerFunctionName;
-        this.currentItem = {};        
+        this.currentItem={};
+        this.parentItemId; 
+        this.parentItemIdFromURL();
     }
     
-    initialise() {
+    initialise(serverFunctionParameters) {
         return new Promise((resolve, reject) => {
-            this.initialiseItemsList(this.getItemsListServerFunctionName)
-                .then((result) =>   { this.items = result
-                                      resolve(this.name + " initialised");
-                                    })
-                //.then(() => this.initialiseItemsList('getPersonRoleAssociationsPerProject', this.selectedProjectId))
-                //.then((result) => { this.personRolesAssociationsRaw = result;
-                //                    resolve("Persons initialised");
-                //                 });
+            this.initialiseItemsList(this.getItemsListServerFunctionName,serverFunctionParameters)
+                .then(result => {   this.items = result;
+                                    
+                                    resolve(this.name + " initialised");  
+                                });
+        });
+    }
+    //najczęściej jest to projectId
+    parentItemIdFromURL() {
+        return new Promise((resolve, reject) => {
+            this.parentItemId = getUrlVars()['parentItemId'];
+            
         });
     }
     
@@ -32,9 +38,10 @@ class SimpleRepository extends Repository {
     //Krok 2 - wywoływana przy SUBMIT
     addNewItem(item, viewObject) {
         return new Promise((resolve, reject) => {
+            this.currentItem = item;
             super.addNewItem(item,this.addNewServerFunctionName,viewObject)
                   .then((res) => {  this.items.push(item)
-                                    
+                                    this.currentItem = item;
                                     console.log('dodano element: ', item);
                                  });
         });

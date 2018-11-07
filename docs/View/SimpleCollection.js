@@ -1,7 +1,21 @@
 class SimpleCollection extends Collection {
-    constructor(id, connectedRepository){
-        super(id);
-        this.connectedRepository = connectedRepository;
+    /*
+     * 
+     * @param {String} id - używane w HTML musi być unikatowe
+     * @param {Repository} connectedRepository
+     * @param {Boolean} isPlane
+     * @returns {SimpleCollection}
+     */
+    constructor(initParamObject){
+        super({id: initParamObject.id,
+               title: initParamObject.title,
+               isPlain: initParamObject.isPlain, 
+               hasFilter: initParamObject.hasFilter,
+               isEditable: initParamObject.isEditable, 
+               isAddable: initParamObject.isAddable, 
+               isDeletable: initParamObject.isDeletable,
+              });
+        this.connectedRepository = initParamObject.connectedRepository;
         //this.initialise(this.makeList());
     }
     

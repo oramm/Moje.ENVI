@@ -1,13 +1,23 @@
 class PersonsCollection extends SimpleCollection {
-    constructor(id){
-        super(id, personsRepository);
+    constructor(initParamObject){
+        super({id: initParamObject.id, 
+               title: initParamObject.title,
+               isPlain: false, 
+               hasFilter: true,
+               isEditable: true, 
+               isAddable: initParamObject.isAddable, 
+               isDeletable: true,
+               connectedRepository: PersonsSetup.personsRepository
+              })
+        this.parentId = initParamObject.parentId;
         
-        this.$addNewModal = new NewPersonModal('newPersonModal', 'Dodaj osobę do książki kontaktów', this);
-        this.$editModal = new EditPersonModal('editPersonModal', 'Edytuj dane osoby', this);
+        if (this.isAddable) 
+            this.$addNewModal = new NewPersonModal('newPersonModal', 'Dodaj osobę do książki kontaktów', this);
+        this.editModal = new EditPersonModal('editPersonModal', 'Edytuj dane osoby', this);
         
         this.initialise(this.makeList());        
     }
-    
+        
     makeItem(dataItem){
         return {    id: dataItem.id,
                         icon:   'person',

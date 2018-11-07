@@ -9,53 +9,48 @@ class Modal {
         this.connectedResultsetComponent = connectedResultsetComponent;
         
         this.dataObject;
-        this.$formElements;
-        this.$form;
+        this.form;
         this.$dom;
     }
     initialise(){
         this.buildDom();
-        this.addFormElements();
         Tools.hasFunction(this.submitTrigger);
+        
     }
     
     buildDom(){
-        this.$form = FormTools.createForm("foo_"+ this.id, "GET");
-        $('body')
-            .append('<div id="' + this.id + '" class="modal modal-fixed-footer">');
-        $('#' + this.id).append('<div class="modal-content">');
-        $('#' + this.id + ' .modal-content').append(this.$form)
-        $('#' + this.id).append('<div class="modal-footer">');
-        $('#' + this.id + ' .modal-footer').append('<button class="modal-action modal-close waves-effect waves-green btn-flat ">OK</a>');
+        this.form = new Form("foo_"+ this.id, "GET", this.formElements);
+        this.$dom = $('<div id="' + this.id + '" class="modal modal-fixed-footer">');
+        this.connectedResultsetComponent.$dom
+            .append(this.$dom).children(':last-child')
+                .append('<div class="modal-content">').children()
+                    .append(this.form.$dom);
+        this.connectedResultsetComponent.$dom.children(':last-child')
+                .append('<div class="modal-footer">').children(':last-child')
+                    .append('<button class="modal-action modal-close waves-effect waves-green btn-flat ">ZAMKNIJ</a>');
         this.setTittle(this.tittle);
         this.setSubmitAction();
-
-        $('#' + this.id).modal();
-    }
-    
-    addFormElements(){
-        for (var i = 0; i<this.$formElements.length; i++){
-            this.appendUiElement(this.$formElements[i])
-        }
     }
     
     setTittle(tittle){
-        $('#' + this.id + ' .modal-content' ).prepend('<h4>'+ tittle +'</h4>');
+        this.$dom.children('.modal-content').prepend('<h4>'+ tittle +'</h4>');
     }
-    /*
-     * @param {String} uiElement html Code for JQUERY Append.
-     */
-    appendUiElement($uiElelment){
-        return new Promise((resolve, reject) => {
-            this.$form
-                    .append('<div class="row">').children(':last-child')
-                        .append($uiElelment);
-            resolve($uiElelment + "appended prpoperly");
-        })
-     }
+    
     
     preppendTriggerButtonTo($uiElelment,caption){
-        $uiElelment.prepend('<button data-target="' + this.id + '" class="btn modal-trigger">'+ caption +'</button>');
+        var $button = $('<button data-target="' + this.id + '" class="btn modal-trigger">'+ caption +'</button>');
+        var _this = this;
+        $button.click(    function(){if(_this.fillWithInitData) _this.fillWithInitData() //funkcja dokładana w SpecificNewModal
+                                  });
+        $uiElelment.prepend($button);
+    }
+    
+    preppendTriggerIconTo($uiElelment,caption){
+        var $icon = $('<a data-target="' + this.id + '" class="collectionItemAddNew modal-trigger"><i class="material-icons">add</i></a>')
+        var _this = this;
+        $icon.click(    function(){if(_this.fillWithInitData) _this.fillWithInitData() //funkcja dokładana w SpecificNewModal
+                                  });
+        $uiElelment.prepend($icon);                         
     }
     
     /*
@@ -63,7 +58,7 @@ class Modal {
      * Klasa pochodna musi mieć metodę submitTrigger()
      */
     setSubmitAction() {
-        this.$form.submit((event) => {
+        this.form.$dom.submit((event) => {
             this.submitTrigger();
             // prevent default posting of form
             event.preventDefault();

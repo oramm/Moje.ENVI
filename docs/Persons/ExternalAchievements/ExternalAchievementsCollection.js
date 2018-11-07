@@ -1,13 +1,23 @@
 class ExternalAchievementsCollection extends SimpleCollection {
-    constructor(id){
-        super(id, externalAchievementsRepository);
+    constructor(initParamObject){
+        super({id: initParamObject.id, 
+               title: initParamObject.title,
+               isPlain: false, 
+               hasFilter: true,
+               isEditable: true, 
+               isAddable: initParamObject.isAddable, 
+               isDeletable: true,
+               connectedRepository: ExternalAchievementsSetup.externalAchievementsRepository
+              })
+        this.parentId = initParamObject.parentId;
         
-        this.$addNewModal = new NewExternalAchievementModal('newExternalAchievement', 'Dodaj osiągnięcie', this);
-        this.$editModal = new EditExternalAchievementModal('editExternalAchievement', 'Edytuj osiągnięcie', this);
+        if (this.isAddable) 
+            this.$addNewModal = new NewExternalAchievementModal('newExternalAchievement', 'Dodaj osiągnięcie', this);
+        this.editModal = new EditExternalAchievementModal('editExternalAchievement', 'Edytuj osiągnięcie', this);
         
         this.initialise(this.makeList());        
     }
-    
+        
     makeItem(dataItem){
         return {    id: dataItem.id,
                         icon:   'person',

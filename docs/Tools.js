@@ -7,6 +7,19 @@ class Tools{
             }
         }
     }
+    static dateDMYtoYMD(inputDate) {   
+        if(inputDate){
+            var parts = inputDate.split("-");
+            if (parts[2].length===4)
+                return parts[2] + '-' + parts[1] + '-' + parts[0];
+            else
+                return inputDate;
+        }
+    }
+    
+    static daysToMilliseconds(days) {
+        return days * 24 * 60 * 60 * 1000;
+    }
     
     static loadjscssfile(filename, filetype){
         if (filetype=="js"){ //if filename is a external JavaScript file
@@ -41,6 +54,15 @@ class Tools{
             throw new SyntaxError("It's neither undefined nor a function. It's a " + typeof functionRef);
         }
     }
+    
+    static stringToSql(string){
+        var sqlString = string.replace(/\'/gi, "\\'");
+        sqlString = sqlString.replace(/\"/gi, '\\"');
+        sqlString = sqlString.replace(/\%/gi, '\\%');
+        sqlString = sqlString.replace(/\_/gi, '\\_');
+        return sqlString;
+    }
+    
     static areEqualObjects(obj1, obj2) {
 	//Loop through properties in object 1
 	for (var p in obj1) {
@@ -67,7 +89,7 @@ class Tools{
 		if (typeof (obj1[p]) == 'undefined') return false;
 	}
 	return true;
-};
+    };
 }
 
 //finds an alament in Array by its value

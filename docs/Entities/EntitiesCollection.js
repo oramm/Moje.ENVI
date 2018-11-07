@@ -1,12 +1,31 @@
 class EntitiesCollection extends SimpleCollection {
-    constructor(id){
-        super(id, entitiesRepository);
+    /*
+     * @param {type} id
+     * @param {boolean} isPlane - czy lista ma być prosta czy z Avatarem
+     * @param {boolean} hasFilter - czy ma być filtr
+     * @param {boolean} isAddable - czy można dodować nowe elementy
+     */
+    constructor(initParamObject){
+        super({id: initParamObject.id, 
+               title: initParamObject.title,
+               isPlain: false, 
+               hasFilter: true,
+               isEditable: true, 
+               isAddable: initParamObject.isAddable, 
+               isDeletable: true,
+               connectedRepository: EntitiesSetup.entitiesRepository
+              })
+        this.parentId = initParamObject.parentId;
+        this.status = initParamObject.status;
         
-        this.$addNewModal = new NewEntityModal('newEntityModal', 'Dodaj podmiot', this);
-        this.$editModal = new EditEntityModal('editEntityModal', 'Edytuj dane podmiotu', this);
+        if (this.isAddable) 
+            this.$addNewModal = new NewEntityModal(this.id + '_newEntityModal', 'Dodaj podmiot', this);
+        
+        this.editModal = new EditEntityModal(this.id + '_editEntityModal', 'Edytuj dane podmiotu', this);
         
         this.initialise(this.makeList());        
-    }
+    }    
+    
     
     makeItem(dataItem){
         dataItem.taxNumber = (dataItem.taxNumber)? dataItem.taxNumber : "";

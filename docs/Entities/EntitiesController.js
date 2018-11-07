@@ -18,7 +18,8 @@ class EntitiesController {
         
         Promise.all(promises)
             .then((res)=>  {   console.log(res); 
-                               view.initialise()
+                               view.initialise();
+                               $('.modal').modal();
                             })
             .catch(err => {
                   console.error(err);

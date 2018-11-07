@@ -1,8 +1,7 @@
 class NewEntityModal extends EntityModal {
     constructor(id, tittle, connectedResultsetComponent){
         super(id, tittle, connectedResultsetComponent);
-        //this.fillWithTestData();
-
+        this.fillWithInitData();
     }
         
     /*
@@ -13,27 +12,32 @@ class NewEntityModal extends EntityModal {
     */
     submitTrigger(){
         super.submitTrigger();
-        if(this.isReallyNew(this.dataObject)){
-            entitiesRepository.addNewItem(entitiesRepository.currentItem, this.connectedResultsetComponent);
-        } else {
-            alert("Taka osoba już jest w bazie");
+        if (this.form.validate(this.dataObject)){
+            this.dataObject.status = this.connectedResultsetComponent.status;
+            EntitiesSetup.entitiesRepository.setCurrentItem(this.dataObject);
+            
+            if(this.isReallyNew(this.dataObject)){
+                EntitiesSetup.entitiesRepository.addNewItem(EntitiesSetup.entitiesRepository.currentItem, this.connectedResultsetComponent);
+            } else {
+                alert("Taki wpis już jest w bazie");
+            }
         }
     }
     
+    
     isReallyNew(entity){
-        var isReallyNew = entitiesRepository.items.find( item => item.name == entity.name && 
+        var duplicateItem = EntitiesSetup.entitiesRepository.items.find( item => item.name == entity.name && 
                                                                 item.taxNumber == item.taxNumber
                                                       )   
-        return (isReallyNew === undefined)? true : false;
+        return (!duplicateItem)? true : false;
     }
     
-    fillWithTestData(){
-        this.$formElements[0].children('input').val('nazwa');
-        this.$formElements[1].children('input').val('adres');
-        this.$formElements[2].children('input').val('1231');
-        this.$formElements[3].children('input').val('www.s.pl');
-        this.$formElements[4].children('input').val('t@t.pl');
-        this.$formElements[5].children('input').val('111');
-        this.$formElements[5].children('input').val('222');
+    fillWithInitData(){
+        //this.formElements[0].$dom.children('input').val('nazwa testoWA');
+        //tinyMCE.get(this.id + 'descriptionReachTextArea').setContent('OPIS TESOTWY');
+        //tinyMCE.triggerSave();
+        //this.startDatePicker.setChosenDate("2018-02-06");
+        //this.endDatePicker.setChosenDate("2018-02-06");
+        //this.statusSelectField.setChosenItem(this.connectedResultsetComponent.status); 
     }
 };

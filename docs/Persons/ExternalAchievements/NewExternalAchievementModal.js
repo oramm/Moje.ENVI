@@ -14,17 +14,21 @@ class NewExternalAchievementModal extends ExternalAchievementModal {
     */
     submitTrigger(){
         super.submitTrigger();
-        if(this.isReallyNew(this.dataObject)){
-            externalAchievementsRepository.addNewItem(externalAchievementsRepository.currentItem, this.connectedResultsetComponent);
-        } else {
-            alert("Taki wpis już jest w bazie");
+        if (this.form.validate(this.dataObject)){
+            this.connectedResultsetComponent.connectedRepository.setCurrentItem(this.dataObject);
+            
+            if(this.isReallyNew(this.dataObject)){
+                this.connectedResultsetComponent.connectedRepository.addNewItem(this.connectedResultsetComponent.connectedRepository.currentItem, this.connectedResultsetComponent);
+            } else {
+                alert("Taki wpis już jest w bazie");
+            }
         }
     }
     
     isReallyNew(externalAchievement){
-        var isReallyNew = externalAchievementsRepository.items.find( item => Tools.areEqualObjects(item, externalAchievement)
-                                                      )   
-        return (isReallyNew === undefined)? true : false;
+        var isReallyNew = this.connectedResultsetComponent.connectedRepository.items.find( item => Tools.areEqualObjects(item, externalAchievement)
+                                                                    )   
+        return (!isReallyNew)? true : false;
     }
     
     fillWithTestData(){

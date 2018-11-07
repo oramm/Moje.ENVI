@@ -59,15 +59,9 @@ class Popup{
         var $iframe = $('#' + iframeName);
         if ($iframe.length) {
             $iframe.attr('src',url);
-            //this.resizeAllIframes();
             return false;
         }
         return true;
     }
-    
-    resizeIframe(iframe) {
-        iframe.height = iframe.contentWindow.document.body.scrollHeight + "px";
-    }
-    
 }
 

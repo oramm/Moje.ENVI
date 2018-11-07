@@ -11,11 +11,15 @@ class EditPersonModal extends PersonModal {
     */
     submitTrigger(){
         super.submitTrigger();
-        
-        if(this.wasChanged(this.dataObject)){
-            personsRepository.editItem(personsRepository.currentItem, this.connectedResultsetComponent);
-        } else {
-            alert("Taka osoba już jest w bazie!");
+        if (this.form.validate(this.dataObject)){
+            this.dataObject.id = PersonsSetup.personsRepository.currentItem.id, //używane tylko przy edycji
+            PersonsSetup.personsRepository.setCurrentItem(this.dataObject);
+            
+            if(this.wasChanged(this.dataObject)){
+                PersonsSetup.personsRepository.editItem(PersonsSetup.personsRepository.currentItem, this.connectedResultsetComponent);
+            } else {
+                alert("Taki wpis już jest w bazie!");
+            }
         }
     }
     

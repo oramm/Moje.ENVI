@@ -11,11 +11,15 @@ class EditExternalAchievementModal extends ExternalAchievementModal {
     */
     submitTrigger(){
         super.submitTrigger();
-        
-        if(this.wasChanged(this.dataObject)){
-            externalAchievementsRepository.editItem(externalAchievementsRepository.currentItem, this.connectedResultsetComponent);
-        } else {
-            alert("Taka osoba już jest w bazie!");
+        if (this.form.validate(this.dataObject)){
+            this.dataObject.id = this.connectedResultsetComponent.connectedRepository.currentItem.id, //używane tylko przy edycji
+            this.connectedResultsetComponent.connectedRepository.setCurrentItem(this.dataObject);
+            
+            if(this.wasChanged(this.dataObject)){
+                this.connectedResultsetComponent.connectedRepository.editItem(this.connectedResultsetComponent.connectedRepository.currentItem, this.connectedResultsetComponent);
+            } else {
+                alert("Taki wpis już jest w bazie!");
+            }
         }
     }
     

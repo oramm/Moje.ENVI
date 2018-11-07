@@ -3,7 +3,8 @@ class EntitiesView extends Popup {
         super();
     }
     initialise(){
-        this.collection = new EntitiesCollection('entitiesCollection');
+        this.collection = new EntitiesCollection({  id: 'tasksListCollection'
+                                                 });
         this.setTittle("Podmioty wpółracujące");
         //this.actionsMenuInitialise();
         

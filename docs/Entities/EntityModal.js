@@ -1,30 +1,31 @@
 class EntityModal extends Modal {
-    constructor(id, tittle, connectedResultsetComponent, connectedResultsetComponentAddNewHandler){
-        super(id, tittle, connectedResultsetComponent, connectedResultsetComponentAddNewHandler);
-        this.$formElements = [
-            FormTools.createInputField(this.id+'nameTextField','Nazwa', true, 150, '.{3,}'),
-            FormTools.createInputField(this.id+'addressTextField','Adres', false, 250, '.{3,}'),
-            FormTools.createInputField(this.id+'taxNumberTextField','NIP', false, 13, '([0-9]{3})(-|)([0-9]{3})(-|)([0-9]{2})(-|)([0-9]{2})'),
-            FormTools.createInputField(this.id+'wwwTextField','Strona www', false, 150, '.{3,}'),
-            FormTools.createEmailInputField(this.id+'emailTextField','E-mail', false, 80, '.{3,}'),
-            FormTools.createInputField(this.id+'phoneTextField','Tel.', false, 25, '.{3,}'),
-            FormTools.createInputField(this.id+'faxTextField','Fax', false, 25, '.{3,}'),
-            FormTools.createSubmitButton("Zapisz")
+    constructor(id, tittle, connectedResultsetComponent){
+        super(id, tittle, connectedResultsetComponent);
+        
+        this.formElements = [
+            new InputTextField (this.id + 'nameTextField','Nazwa', undefined, true, 150, '.{3,}'),
+            new InputTextField (this.id + 'addressTextField','Adres', undefined, false, 250, '.{3,}'),
+            new InputTextField (this.id + 'taxNumberTextField','NIP', undefined, false, 13, '([0-9]{3})(-|)([0-9]{3})(-|)([0-9]{2})(-|)([0-9]{2})'),
+            new InputTextField (this.id + 'wwwTextField','Strona www', undefined, false, 150, '.{3,}'),
+            new InputTextField (this.id + 'emailTextField','E-mail', undefined, false, 80, '.{3,}'),
+            new InputTextField (this.id + 'phoneTextField','Tel.', undefined, false, 25, '.{3,}'),
         ];
         this.initialise();
-        //$('#' + this.id + 'nameTextField').keyup(function() {
-        //    alert($(this).val())})
     }
+
     fillWithData(){
-        this.$formElements[0].children('input').val(entitiesRepository.currentItem.name);
-        this.$formElements[1].children('input').val(entitiesRepository.currentItem.address);
-        this.$formElements[2].children('input').val(entitiesRepository.currentItem.taxNumber);
-        this.$formElements[3].children('input').val(entitiesRepository.currentItem.www);
-        this.$formElements[4].children('input').val(entitiesRepository.currentItem.email);
-        this.$formElements[5].children('input').val(entitiesRepository.currentItem.phone);
-        this.$formElements[6].children('input').val(entitiesRepository.currentItem.fax)
+        this.form.fillWithData([
+            EntitiesSetup.entitiesRepository.currentItem.name,
+            EntitiesSetup.entitiesRepository.currentItem.address,
+            EntitiesSetup.entitiesRepository.currentItem.taxNumber,
+            EntitiesSetup.entitiesRepository.currentItem.www,
+            EntitiesSetup.entitiesRepository.currentItem.email,
+            EntitiesSetup.entitiesRepository.currentItem.phone,
+            EntitiesSetup.entitiesRepository.currentItem.fax
+        ]);
     }
-        
+    
+    
     /*
      * Krok 1 - po kliknięciu 'Submit' formularza dodawania
      * Proces: this.submitTrigger >> rolesRepository.addNewEntity
@@ -32,17 +33,19 @@ class EntityModal extends Modal {
      *                                  >> repository. addNewHandler >> entitiesRolesCollection.addNewHandler[DONE]
     */
     submitTrigger(){
-        this.dataObject = { id: entitiesRepository.currentItem.id, //używane tylko przy edycji
-                            name: $('#'+this.id + 'nameTextField').val(),
-                            address: $('#' + this.id + 'addressTextField').val(),
-                            taxNumber: $('#' + this.id + 'taxNumberTextField').val(),
-                            www: $('#' + this.id + 'wwwTextField').val(),
-                            email: $('#' + this.id + 'emailTextField').val(),
-                            phone: $('#' + this.id + 'phoneTextField').val(),
-                            fax: $('#' + this.id + 'faxTextField').val()
-
+        this.dataObject = { name: '',
+                            address: '',
+                            taxNumber: '',
+                            www: '',
+                            email: '',
+                            phone: '',
+                            fax: ''
                           };
-        entitiesRepository.setCurrentItem(this.dataObject);
+        this.form.submitHandler(this.dataObject);
+        if (this.form.validate(this.dataObject)){
+            
+            this.dataObject.id = EntitiesSetup.entitiesRepository.currentItem.id;
+        }
     }
     
 };

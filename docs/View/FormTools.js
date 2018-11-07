@@ -23,7 +23,6 @@ class AutoCompleteTextField {
         this.onCompleteCallBack = onCompleteCallBack;
         this.viewObject = viewObject;
         this.chosenItem;
-        this.isRequired = false;
         
         this.pushData(this.key); 
     }
@@ -32,7 +31,7 @@ class AutoCompleteTextField {
         this.$dom = $('<div class="input-field">');
         var $icon = $('<i class="material-icons prefix">' + icon + '</i>');
         var $input = $('<input name="' + id + '" type="text" class="autocomplete" autocomplete="off">')
-                .attr('id',id)
+                .attr('id',id);
         
         var $label = $('<label for="'+ id +'">'+ label +'</label>');
 
@@ -40,7 +39,7 @@ class AutoCompleteTextField {
             $input
                 .attr('required','true')
                 .attr('pattern','[]');
-            this.isRequired = true;
+            this.isRequired = isRequired;
         }
         
         this.$dom
@@ -73,7 +72,7 @@ class AutoCompleteTextField {
 
     setChosenItem(inputValue){
             this.chosenItem = search(inputValue, this.key, this.repository.items);
-            this.repository.selectedItem = this.chosenItem;
+            this.repository.currentItem = this.chosenItem;
             if (this.chosenItem !== undefined) this.$dom.children('input').attr('pattern','^' + inputValue + '$')
             this.$dom.children('input').val(inputValue);
             
@@ -114,7 +113,7 @@ class SelectField{
                                 .text(optionsData[i]);
             this.$select.append($option);
         }
-        
+    
     }
     
     createSelectField(id, label, icon, isRequired, options){
@@ -133,6 +132,11 @@ class SelectField{
         var itemSelectedId = 2 + this.optionsData.indexOf(inputValue);
         this.$dom.find('li:nth-child('+itemSelectedId+')').click();
         this.chosenItem = inputValue;
+    }
+    
+    validate(){
+        if (this.isRequired)
+            return this.chosenItem !== "Wybierz opcję";
     }
 } 
 
@@ -211,22 +215,19 @@ class ReachTextArea {
      *      tinyMCE.triggerSave();
      */
     createReachTextArea(){
-        //var $textArea;
-        //$textArea = FormTools.createTextArea(this.id, this.label, this.isRequired);
         this.$dom = $('<div>');
-        
+        var $input = $('<textarea class="materialize-textarea validate" id="' + this.id + '" name="' + this.id + '" >');
         var $label = $('<label>'+ this.label +'</label>');
-        var $textArea = $('<div class="input-field reachTextArea">');
-        $textArea
-            .attr('max_chars',this.maxCharacters);
-        //var $input = $('<textarea id="' + this.id + '" name="' + this.id + '">');
-        //$textArea
-        //    .append($input);
+        $label.addClass('active')
+        
         this.$dom
             .append($label)
-            .append($textArea);
+            .append($input);
     
-        
+        $input
+            .attr('max_chars',this.maxCharacters)
+            .addClass('reachTextArea')
+            //.append($input);
     }
 }
 
@@ -331,7 +332,7 @@ class DatePicker {
         picker.set('select', date, { format: 'yyyy-mm-dd' })
     }
     
-    checkDate() {
+    validate() {
         var test = $('#' + this.id).val() != '';
         if (test === false) {
             this.$input.addClass('invalid');
@@ -341,8 +342,311 @@ class DatePicker {
         return test;
     }
 }
+class InputTextField {
+    constructor(id, label, icon, isRequired, maxCharacters, validateRegex, dataError){
+        this.id = id;
+        this.label = label;
+        this.icon = icon;
+        this.isRequired = isRequired;
+        this.$dom;
+        this.createInputField(id, label, icon, isRequired, maxCharacters, validateRegex, dataError);
+    }
+    //ikony do dodania
+    createInputField(id, label, icon, isRequired, maxCharacters, validateRegex, dataError){
+        this.$dom = $('<div class="input-field">');
+        var $input = $('<input type="text" class="validate" id="' + id + '" name="' + id + '">');
+        var $label = $('<label for="'+ id +'">'+ label +'</label>');
+        this.$dom
+            .append($input)
+            .append($label);
+        if (isRequired)
+            $input.attr('required','true');
+      
+        if (maxCharacters >0){
+            $input
+                .attr('data-length', maxCharacters);
+            $input.characterCounter();
+        }
+        if (validateRegex){
+            $input
+                .attr('pattern',validateRegex)   ;         
+        }
+
+        if (dataError !== undefined) 
+            $label.attr('data-error',dataError);
+        else
+            $label.attr('data-error','Niewłaściwy format danych');
+    }
+}
+class Tabs {
+    constructor(initParameters){
+        this.id = initParameters.id;
+        this.swipeable = initParameters.swipeable;
+        this.onShow = initParameters.onShow;
+        this.responsiveThreshold = initParameters.responsiveThreshold;
+        this.tabsData = initParameters.tabsData;
+        this.$dom = $('<div class="row">');
+        this.$tabs = $('<ul class="tabs">');
+        this.$panels = $('<div class="tabsPanels">');
+        this.buildDom();
+    }
+    //ikony do dodania
+    buildDom(){
+        this.$dom
+            .append('<div class="col s12"').children()
+                .append(this.$tabs);
+        this.$dom.append(this.$panels);
+        for (var i=0; i<this.tabs.length; i++){
+            var $link = $('<a>');
+            $link
+                .attr('href','tab_'+this.tabsData[i].name)
+                .html(this.tabsData[i].name);
+            this.$tabs
+                .append('<li class="tab col s3">').children()
+                    .append($link);
+            this.$panels.append('<div id="'+ this.tabsData[i].name + '" class="col s12">');
+        }
+        this.$tabs[0].children('a').addClass('active');
+        //if(this.swipeable) this.$tabs.attr('id', "tabs-swipe-demo");
+    }
+}
+
+class Form {
+    constructor(id, method,elements){
+        this.id = id;
+        this.method = method;
+        this.elements = elements;
+        this.$dom;
+        this.buidDom();
+        this.dataObject //do refactoringu w przyszłości przenieść tu obsługę SubmitRrigger() z modali
+    }
+    
+    buidDom(){
+        this.$dom = $('<form id="'+ this.id +'" method="'+ this.method +'">');
+        for (var i = 0; i<this.elements.length; i++){
+            this.$dom
+                    .append('<div class="row">').children(':last-child')
+                        .append(this.elements[i].$dom);
+        }
+        this.$dom.append(FormTools.createSubmitButton("Zapisz"));
+    }
+    //używane przy edycji modala
+    fillWithData(currentItem){
+        for (var i =0; i < this.elements.length; i++){
+            switch (this.elements[i].constructor.name) {
+                case 'InputTextField' :
+                    this.elements[i].$dom.children('input').val(currentItem[i]);
+                    break;
+                case 'ReachTextArea' :
+                    if (!currentItem[i]) currentItem[i]='';
+                    tinyMCE.get(this.elements[i].id).setContent(currentItem[i]);
+                    tinyMCE.triggerSave();
+                    break;
+                case 'DatePicker' :
+                    this.elements[i].setChosenDate(currentItem[i])
+                    break;
+                case 'SelectField' :
+                    this.elements[i].setChosenItem(currentItem[i]);
+                    break;
+                case 'AutoCompleteTextField' :
+                    this.elements[i].setChosenItem(currentItem[i]);
+                    break;
+                case 'SelectField' :
+                    this.elements[i].simulateChosenItem(currentItem[i]);
+                    break
+            }
+        }
+        Materialize.updateTextFields();
+    }
+    //używane przy SubmitTrigger w Modalu
+    validate(dataObject){
+        for (var i =0; i < this.elements.length; i++){
+            switch (this.elements[i].constructor.name) {
+                case 'DatePicker' :
+                case 'SelectField' :
+                    return this.elements[i].validate(dataObject[i]);
+                  
+                default :
+                    //w pozostałych przypadkach walidację zostawiamy dla natywnego HTML5
+                    return true;
+            }
+        }
+    }
+    /*
+     * Aktualizuje atrybuty edytowanego obiektu na podstawie pól formularza
+     * @param {repositoryData} dataObject
+     */
+    submitHandler(dataObject){
+        var i = 0;
+        for (var property in dataObject){
+            
+            switch (this.elements[i].constructor.name) {
+                case 'InputTextField' : 
+                case 'ReachTextArea' :
+                case 'TextArea':
+                    //TODO: trzeba przenieść TextArea do odrębnej klasy, żeby to zadziałało
+                    //$('#' + this.id + 'employerTextArea').val()
+                    dataObject[property] = $('#'+ this.elements[i].id).val();
+                    break;
+                case 'DatePicker' :
+                    dataObject[property] = Tools.dateDMYtoYMD($('#'+ this.elements[i].id).val());
+                    break;
+                case 'SelectField' :
+                    dataObject[property] =  this.elements[i].$dom.find('input').val();
+                    break;
+                case 'AutoCompleteTextField' :
+                    if (this.elements[i].chosenItem) 
+                        dataObject[property] =  this.elements[i].chosenItem;
+                    break;
+            }
+            i++;
+        }
+    }
+}
+
+class AtomicEditForm extends Form {
+    constructor(id, method, elements, atomicEditLabel){
+        super(id, method, elements);
+        if(this.elements[0].constructor.name !== 'ReachTextArea')
+            this.$dom.children(':last-child').remove();
+        this.dataObject = {editedParameter: ''};
+        this.atomicEditLabel = atomicEditLabel;
+        this.setSubmitAction();
+        this.setCancelAction();
+    }
+    
+    /*
+     * Funkcja musi być przekazana joko argument, albo obsłużona w klasie pochodnej.
+     * Klasa pochodna musi mieć metodę submitTrigger()
+     * @param {function} submitTrigger
+     */
+    setSubmitAction(submitTrigger) {
+        this.$dom.submit((event) => {
+            this.submitTrigger();
+            //(typeof submitTrigger  === 'function')? submitTrigger() : this.submitTrigger();
+            // prevent default posting of form
+            event.preventDefault();
+        });
+    }
+    
+    setCancelAction() {
+        this.$dom.keyup((event) => {
+            if (event.keyCode === 13) {
+                this.$dom.submit();
+            }
+            if (event.keyCode === 27) {
+                this.atomicEditLabel.switchOffEditMode();
+            }
+        });
+        
+        this.$dom.find('input').focusout((event) => {
+            if(this.elements[0].constructor.name !== 'DatePicker')
+                this.atomicEditLabel.switchOffEditMode();
+        });
+        
+    }
+    /*
+     * Uruchamiana po kliknięciu przesłaniu formularza
+     */
+    submitTrigger(){
+        this.submitHandler(this.dataObject);
+        if (this.validate(this.dataObject)){    
+            this.atomicEditLabel.caption = this.dataObject.editedParameter;
+            this.atomicEditLabel.connectedResultsetComponent.connectedRepository.currentItem[this.atomicEditLabel.editedPropertyName] = this.dataObject.editedParameter;
+            
+            this.atomicEditLabel.connectedResultsetComponent.connectedRepository.editItem(this.atomicEditLabel.connectedResultsetComponent.connectedRepository.currentItem,
+                                                                                          this.atomicEditLabel.connectedResultsetComponent);
+        }
+    }
+}
+
+class AtomicEditLabel {
+    /*
+     * @param {String} caption
+     * @param {this.connectedRepository.currentItem} dataObject
+     * @param {type} input
+     * @param {String} editedPropertyName
+     * @param {Collection} connectedResultsetComponent
+     * @returns {AtomicEditLabel}
+     */
+    constructor(caption, dataObject, input, editedPropertyName, connectedResultsetComponent){
+        this.caption = caption;
+        this.dataObject = dataObject;
+        this.editedPropertyName = editedPropertyName;
+        this.connectedResultsetComponent = connectedResultsetComponent;
+        this.input = input;
+        this.buildStaticDom();
+        this.$parent;
+    }
+    
+    buildStaticDom(){
+        this.$dom = $('<span>');
+        this.$dom
+            .html(this.caption+'<br>');
+        this.setEditLabelAction();
+    }
+    
+    buildEditModeDom(){
+        this.$parent = this.$dom.parent(); 
+        this.$parent.children('form').remove();
+        this.$dom.remove();
+        this.form = new AtomicEditForm("tmpEditForm_"+ this.dataObject.id, "GET", 
+                        [this.input], this);
+        this.$dom = this.form.$dom;
+
+        this.$dom.addClass('atomicEditForm');          
+    }
+    /*
+     * inicjuje i wyświetla formularz edycji pola
+     */
+    setEditLabelAction(){
+        this.$dom.off('dblclick');
+        var _this = this;
+        this.$dom.dblclick(function(e) { 
+                                            //$(this).parent().parent().parent().parent().trigger('click');                                 
+                                            _this.switchOnEditMode();
+                                            _this.$dom.find('.datepicker').pickadate({
+                                                                            selectMonths: true, // Creates a dropdown to control month
+                                                                            selectYears: 15, // Creates a dropdown of 15 years to control year,
+                                                                            today: 'Dzisiaj',
+                                                                            clear: 'Wyszyść',
+                                                                            close: 'Ok11',
+                                                                            closeOnSelect: false, // Close upon selecting a date,
+                                                                            container: undefined, // ex. 'body' will append picker to body
+                                                                            format: 'dd-mm-yyyy'
+                                                                        });
+                                            ReachTextArea.reachTextAreaInit();
+                                            _this.form.fillWithData([_this.dataObject[_this.editedPropertyName]]);
+                                            _this.$dom.find('input').focus();
+                                        });
+                                        
+    }
+    switchOnEditMode(){
+        this.buildEditModeDom();
+        this.$parent.append(this.$dom);
+        $('select').material_select();
+        Materialize.updateTextFields();
+                                            
+        
+    }
+    
+    switchOffEditMode(){
+        this.$dom.remove();
+        this.buildStaticDom();
+        this.$parent
+            .append(this.$dom)
+    }
+}
 
 class FormTools{
+    /*
+     * @deprecated zastąpić klasą odrębną
+     */
+    static createForm(id, method){
+        var form = $('<form id="'+ id +'" method="'+ method +'">');
+        return form;
+    }
+    
     /* 
      * initiates a radio input
      * it must be wrapped in a HTML element named as #name argument
@@ -376,11 +680,6 @@ class FormTools{
         return radioButtons;
     }
 
-    static createForm(id, method){
-        var form = $('<form id="'+ id +'" method="'+ method +'">');
-        return form;
-    }
-
     static createSubmitButton(caption){
         var button = $('<Button class="btn waves-effect waves-light" name="action"></button>');
         button.append(caption);
@@ -410,13 +709,13 @@ class FormTools{
         }
         if (validateRegex !== undefined){
             $input
-                .attr('pattern',validateRegex)            
+                .attr('pattern',validateRegex)   ;         
         }
 
         if (dataError !== undefined) 
-            $label.attr('data-error',dataError)
+            $label.attr('data-error',dataError);
         else
-            $label.attr('data-error','Niewłaściwy format danych')
+            $label.attr('data-error','Niewłaściwy format danych');
         
         return $textField;
     }
@@ -424,10 +723,15 @@ class FormTools{
     static createFilterInputField(id, $filteredObject){
         var $textField = this.createInputField(id, 'Filtruj listę');
         
-        $textField.children().on("keyup", function() {
+        $textField.children('input').on("keyup", function() {
             var value = $(this).val().toLowerCase();
             $filteredObject.filter(function() {
-                $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+                //https://stackoverflow.com/questions/3041320/regex-and-operator?noredirect=1&lq=1
+                //var regex = /^(?=.*my)(?=.*word).*$/igm;
+                //var words = value.split(' ');
+                //console.log(words);
+                //return regex.test($(this).toggle($(this).text().toLowerCase()));
+                $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1);
             });
         });
         
@@ -458,24 +762,36 @@ class FormTools{
         return $textArea;
     }
 
-    static createFlatButton(caption, onClickFunction){
+    static createFlatButton(caption, onClickFunction,viewObject){
         var $button = $('<input type="button" ' +
                                'value="' + caption  +'" ' + 
                                'class="waves-effect waves-teal btn-flat"' +
                         '/>');
-        $button.click(onClickFunction);
+        $button.click(function() {onClickFunction.apply(viewObject,[])});
         return $button;
     }
 
-    static createRaisedButton(caption, onClickFunction){
+    static createRaisedButton(caption, onClickFunction,viewObject){
         var $button = $('<input type="button" ' +
                                'value="' + caption  +'" ' + 
                                'class="waves-effect waves-teal btn"' +
                         '/>');
-        $button.click(onClickFunction);
+        
+        $button.click(onClickFunction.apply(viewObject,[]));
         return $button;
     }
-
+    static createModalTriggerIcon(id, icon){
+        var $triggerIcon = $('<span>');
+        $triggerIcon
+            .attr('data-target',id)
+            .addClass('collectionItemEdit modal-trigger')
+        $triggerIcon
+            .append('<span>').children()
+            .addClass('material-icons')
+            .html(icon);
+        //'<span data-target="' + this.projectDetailsCollection.editModal.id + '" class="collectionItemEdit modal-trigger"><i class="material-icons">edit</i></span>'
+        return $triggerIcon;
+    }
     static appendButtonTo(parentNode, onClickFunction, value, className){
         var $input = $('<input type="button" ' +
                                'value="' + value  +'" ' + 

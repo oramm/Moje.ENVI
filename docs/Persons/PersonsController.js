@@ -25,7 +25,10 @@ class PersonsController {
         
         Promise.all(promises)
             .then((res)=>  {   console.log(res); 
-                               personsView.initialise()
+                               personsView.initialise();
+                               $('.modal').modal();
+                               ReachTextArea.reachTextAreaInit();
+                               Materialize.updateTextFields();
                             })
             .catch(err => {
                   console.error(err);

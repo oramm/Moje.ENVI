@@ -1,7 +1,7 @@
 class NewPersonModal extends PersonModal {
     constructor(id, tittle, connectedResultsetComponent){
         super(id, tittle, connectedResultsetComponent);
-        this.fillWithTestData();
+        this.fillWithInitData();
 
     }
         
@@ -13,29 +13,26 @@ class NewPersonModal extends PersonModal {
     */
     submitTrigger(){
         super.submitTrigger();
-        if(this.isReallyNew(this.dataObject)){
-            personsRepository.addNewItem(personsRepository.currentItem, this.connectedResultsetComponent);
-        } else {
-            alert("Taka osoba już jest w bazie");
+        if (this.form.validate(this.dataObject)){
+            PersonsSetup.personsRepository.setCurrentItem(this.dataObject);
+            
+            if(this.isReallyNew(this.dataObject)){
+                PersonsSetup.personsRepository.addNewItem(PersonsSetup.personsRepository.currentItem, this.connectedResultsetComponent);
+            } else {
+                alert("Taki wpis już jest w bazie");
+            }
         }
     }
     
     isReallyNew(person){
-        var isReallyNew = personsRepository.items.find( item => item.name == person.name && 
+        var duplicateItem = personsRepository.items.find( item => item.name == person.name && 
                                                                 item.surname == person.surname && 
                                                                 item.email == person.email
                                                       )   
-        return (isReallyNew === undefined)? true : false;
+        return (!duplicateItem)? true : false;
     }
     
-    fillWithTestData(){
-        this.$formElements[0].children('input').val('Imię');
-        this.$formElements[1].children('input').val('Nazwisko');
-        this.$formElements[2].children('input').val('Stanowisko');
-        this.$formElements[3].children('input').val('t@t.pl');
-        this.$formElements[4].children('input').val('nazwa firmy');
-        this.$formElements[5].children('input').val('600222');
-        this.$formElements[6].children('input').val('77111');
-        this.$formElements[7].children('input').val('opis');
+    fillWithInitData(){
+    
     }
 };

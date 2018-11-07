@@ -3,7 +3,7 @@ class PersonsView extends Popup {
         super();
     }
     initialise(){
-        this.personsCollection = new PersonsCollection('personsCollection');
+        this.personsCollection = new PersonsCollection({id: 'personsCollection'});
         this.setTittle("Kontakty ENVI");
         //this.actionsMenuInitialise();
         

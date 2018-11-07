@@ -11,17 +11,21 @@ class EditEntityModal extends EntityModal {
     */
     submitTrigger(){
         super.submitTrigger();
-        
-        if(this.wasChanged(this.dataObject)){
-            entitiesRepository.editItem(entitiesRepository.currentItem, this.connectedResultsetComponent);
-        } else {
-            alert("Taki podmiot już jest w bazie!");
+        if (this.form.validate(this.dataObject)){
+            this.dataObject.id = EntitiesSetup.entitiesRepository.currentItem.id, //używane tylko przy edycji
+            EntitiesSetup.entitiesRepository.setCurrentItem(this.dataObject);
+            
+            if(this.wasChanged(this.dataObject)){
+                EntitiesSetup.entitiesRepository.editItem(EntitiesSetup.entitiesRepository.currentItem, this.connectedResultsetComponent);
+            } else {
+                alert("Taki wpis już jest w bazie!");
+            }
         }
     }
     
     wasChanged(entity){
-        var check = entitiesRepository.items.find( item => Tools.areEqualObjects(item, entity)
+        var check = EntitiesSetup.entitiesRepository.items.find( item => Tools.areEqualObjects(item, entity)
                                                       )   
-        return (check === undefined)? true : false;
+        return (!check)? true : false;
     }
 };
