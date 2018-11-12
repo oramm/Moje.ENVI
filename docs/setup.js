@@ -19,8 +19,8 @@ var SCOPES = ['https://www.google.com/calendar/feeds',
 // included, separated by spaces.
 //var SCOPES = 'https://www.googleapis.com/auth/drive';  //test
 
- SCOPES =  'https://www.google.com/calendar/feeds ' + 
-              'https://www.googleapis.com/auth/forms ' +
+ SCOPES =  'https://www.google.com/calendar ' + 
+              //'https://www.googleapis.com/auth/forms ' +
               'https://www.googleapis.com/auth/script.external_request ' +  
               'https://www.googleapis.com/auth/spreadsheets ' +
               'https://www.googleapis.com/auth/userinfo.email ' +

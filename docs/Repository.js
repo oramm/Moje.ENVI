@@ -22,7 +22,7 @@ class Repository {
         
     }
 
-    initialiseItemsList(serverFunctionName,serverFunctionParameters) {
+    doServerFunction(serverFunctionName,serverFunctionParameters) {
         return new Promise((resolve, reject) => {
             // Create an execution request object.
             // Create execution request.
@@ -40,7 +40,7 @@ class Repository {
             });
 
             op
-              .then((resp) => this.handleInitialiseItemsList(resp.result))
+              .then((resp) => this.handleDoServerFunction(resp.result))
               .then((result) => {   console.log(result);
                                     resolve(result);
                                 })
@@ -49,8 +49,8 @@ class Repository {
         });
     }
     
-    //TODO: scalić funkcje handleInitialiseItemsList() z handleAddNewItem
-    handleInitialiseItemsList(resp) {
+    //TODO: scalić funkcje handleDoServerFunction() z handleAddNewItem
+    handleDoServerFunction(resp) {
         return new Promise((resolve, reject) => {
             if (resp.error && resp.error.status) {
                 // The API encountered a problem before the script

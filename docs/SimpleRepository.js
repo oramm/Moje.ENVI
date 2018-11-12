@@ -16,7 +16,7 @@ class SimpleRepository extends Repository {
     
     initialise(serverFunctionParameters) {
         return new Promise((resolve, reject) => {
-            this.initialiseItemsList(this.getItemsListServerFunctionName,serverFunctionParameters)
+            this.doServerFunction(this.getItemsListServerFunctionName,serverFunctionParameters)
                 .then(result => {   this.items = result;
                                     
                                     resolve(this.name + " initialised");  
