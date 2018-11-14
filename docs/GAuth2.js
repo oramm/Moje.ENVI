@@ -45,7 +45,7 @@ class GAuth2 {
     initClient(_this,windowController) {
       (_this==undefined)? _this=this: true;
       gapi.client.init(_this.initParams).then(
-        () => { user = gapi.auth2.getAuthInstance().currentUser.get().getBasicProfile();
+        () => { var user = gapi.auth2.getAuthInstance().currentUser.get().getBasicProfile();
                 windowController.main();}
         );
     }
