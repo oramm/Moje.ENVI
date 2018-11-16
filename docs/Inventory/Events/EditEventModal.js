@@ -25,7 +25,7 @@ class EditEventModal extends EventModal {
     }
     
     wasChanged(externalAchievement){
-        var check = this.connectedResultsetComponent.connectedRepository.items.find(item => Tools.areEqualObjects(externalAchievement,item))   
+        //var check = this.connectedResultsetComponent.connectedRepository.items.find(item => Tools.areEqualObjects(externalAchievement,item))   
         return (check === undefined)? true : false;
     }
 };

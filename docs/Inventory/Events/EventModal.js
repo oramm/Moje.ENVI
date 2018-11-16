@@ -27,6 +27,7 @@ class EventModal extends Modal {
     }
 
     fillWithData(){
+        $('select').material_select();
         this.form.fillWithData([
             this.connectedResultsetComponent.connectedRepository.currentItem.name,
             this.connectedResultsetComponent.connectedRepository.currentItem.description,
@@ -56,7 +57,7 @@ class EventModal extends Modal {
             if (this.connectedResultsetComponent.connectedRepository.currentItem)
                 this.dataObject.id = this.connectedResultsetComponent.connectedRepository.currentItem.id; //używane tylko przy edycji
             
-            this.dataObject.status = connectedResultsetComponent.connectedRepository.currentItem.status;
+            
             this.dataObject.type = this.connectedResultsetComponent.eventsType;
             this.dataObject.inventoryItemId = InventorySetup.inventoryRepository.currentItem.id;
             this.dataObject.nameSurnameEmail = this.dataObject.chosenPerson.nameSurnameEmail;

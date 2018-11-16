@@ -451,7 +451,7 @@ class Form {
                 case 'AutoCompleteTextField' :
                     this.elements[i].setChosenItem(currentItem[i]);
                     break;
-                case 'SelectField' :
+                case 'SelectFieldBrowserDefault' :
                     this.elements[i].simulateChosenItem(currentItem[i]);
                     break
             }
