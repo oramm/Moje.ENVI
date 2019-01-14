@@ -42,5 +42,9 @@ class EventModal extends Modal {
      * @returns {undefined}
      */
     initAddNewData(){
+        this.connectedResultsetComponent.connectedRepository.currentItem = {
+                type: this.connectedResultsetComponent.eventsType,
+                inventoryItemId: this.connectedResultsetComponent.parentId
+            };
     }
 };

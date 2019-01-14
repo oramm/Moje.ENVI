@@ -244,7 +244,7 @@ class Collapsible {
         var _this = this;
         this.$dom.find(".collapsibleItemEdit").click(function() { 
                                         $(this).parent().parent().parent().trigger('click');
-                                        _this.editModal.fillWithData();
+                                        _this.editModal.triggerAction(_this);
                                         Materialize.updateTextFields();
                                         });
     }
