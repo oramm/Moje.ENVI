@@ -7,14 +7,7 @@ class SimpleCollection extends Collection {
      * @returns {SimpleCollection}
      */
     constructor(initParamObject){
-        super({id: initParamObject.id,
-               title: initParamObject.title,
-               isPlain: initParamObject.isPlain, 
-               hasFilter: initParamObject.hasFilter,
-               isEditable: initParamObject.isEditable, 
-               isAddable: initParamObject.isAddable, 
-               isDeletable: initParamObject.isDeletable,
-              });
+        super(initParamObject);
         this.connectedRepository = initParamObject.connectedRepository;
         //this.initialise(this.makeList());
     }

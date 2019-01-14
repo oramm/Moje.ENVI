@@ -220,8 +220,8 @@ class Collection {
     actionsMenuInitialise(){
         //var newItemButton = FormTools.createFlatButton('Dodaj '+ this.itemsName, this.addNewHandler);
         //this.$actionsMenu.append(newItemButton);
-        if (this.$addNewModal !== undefined)
-            this.$addNewModal.preppendTriggerButtonTo(this.$actionsMenu,"Dodaj wpis");
+        if (this.addNewModal !== undefined)
+            this.addNewModal.preppendTriggerButtonTo(this.$actionsMenu,"Dodaj wpis");
         this.filterInitialise();
 
     }

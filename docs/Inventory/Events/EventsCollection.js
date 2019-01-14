@@ -8,8 +8,10 @@ class EventsCollection extends SimpleCollection {
     constructor(initParamObject){
         super({id: initParamObject.id, 
                title: initParamObject.title,
+               addNewModal: initParamObject.addNewModal,
+               editModal: initParamObject.editModal,
                isPlain: true, 
-               hasFilter: false,
+               hasFilter: true,
                isEditable: true, 
                isAddable: initParamObject.isAddable, 
                isDeletable: true,
@@ -17,11 +19,6 @@ class EventsCollection extends SimpleCollection {
               })
         this.parentId = initParamObject.parentId;
         this.eventsType = initParamObject.eventsType;
-        
-        if (this.isAddable) 
-            this.$addNewModal = new NewEventModal(this.id + '_newEvent', 'Dodaj', this);
-        
-        this.editModal = new EditEventModal(this.id + '_editEvent', 'Edytuj', this);
         
         this.initialise(this.makeList());        
     }    
@@ -83,7 +80,7 @@ class EventsCollection extends SimpleCollection {
                                                                      'Wybierz imię i nazwisko')
         personAutoCompleteTextField.initialise(InventorySetup.personsRepository,"nameSurnameEmail", this.onOwnerChosen, this);
         
-        var personAtomicEditLabel = new AtomicEditLabel(dataItem.nameSurnameEmail, 
+        var personAtomicEditLabel = new AtomicEditLabel(dataItem._owner.nameSurnameEmail, 
                                                         dataItem, 
                                                         personAutoCompleteTextField,
                                                         'nameSurnameEmail',

@@ -63,6 +63,10 @@ class Tools{
         return sqlString;
     }
     
+    static cloneOfObject(object){
+        return JSON.parse(JSON.stringify(object));
+    }
+
     static areEqualObjects(obj1, obj2) {
 	//Loop through properties in object 1
 	for (var p in obj1) {
@@ -72,7 +76,7 @@ class Tools{
 		switch (typeof (obj1[p])) {
 			//Deep compare objects
 			case 'object':
-				if (!Object.compare(obj1[p], obj2[p])) return false;
+				if (!areEqualObjects(obj1[p], obj2[p])) return false;
 				break;
 			//Compare function code
 			case 'function':

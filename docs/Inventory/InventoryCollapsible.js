@@ -2,8 +2,10 @@ class InventoryCollapsible extends SimpleCollapsible {
     constructor(id, connectedRepository){
         super(id, 'Pojazd lub sprzęt', connectedRepository) ;
         
-        this.$addNewModal = new NewInventoryItemModal(id + '_newInventoryItem', 'Dodaj pojazd lub sprzęt', this);
-        this.editModal = new EditInventoryItemModal(id + '_editInventoryItem', 'Edytuj dane pojazdu lub sprzętu', this);
+        this.addNewModal = new InventoryItemModal(id + '_newInventoryItem', 'Dodaj pojazd lub sprzęt', this, 'ADD_NEW');
+        this.editModal = new InventoryItemModal(id + '_editInventoryItem', 'Edytuj dane pojazdu lub sprzętu', this, 'EDIT'); 
+        this.addNewEventModal = new EventModal(this.id + '_newEvent', 'Dodaj', this,'ADD_NEW');
+        this.editEventModal = new EventModal(this.id + '_editEvent', 'Edytuj', this, 'EDIT');
         
         this.initialise(this.makeCollapsibleItemsList());
     }
@@ -15,7 +17,7 @@ class InventoryCollapsible extends SimpleCollapsible {
     makeItem(dataItem, $bodyDom){
         var licensePlateNumber = (dataItem.licensePlateNumber)? dataItem.licensePlateNumber : ''
         return {    id: dataItem.id,
-                    name: dataItem.name + ' ' + InventorySetup.getItemStatusNameById(dataItem.status) + ' ' +
+                    name: dataItem.name + ' ' + dataItem.status + ' ' +
                           licensePlateNumber,
                     $body: $bodyDom
                     };
@@ -24,6 +26,8 @@ class InventoryCollapsible extends SimpleCollapsible {
     makeBodyDom(dataItem){
         var normalEventsCollection = new EventsCollection({ id: 'eventsCollection_' + dataItem.id, 
                                                         parentId: dataItem.id,
+                                                        addNewModal: this.addNewEventModal,
+                                                        editModal: this.editEventModal,
                                                         eventsType: 'NORMAL',
                                                         title: 'Przeglądy techniczne',
                                                         eventsType: 'NORMAL'
@@ -32,6 +36,8 @@ class InventoryCollapsible extends SimpleCollapsible {
 
         var damagesCollection = new EventsCollection({  id: 'damagesCollection_' + dataItem.id, 
                                                         parentId: dataItem.id,
+                                                        addNewModal: this.addNewEventModal,
+                                                        editModal: this.editEventModal,
                                                         eventsType: 'DAMAGES',
                                                         title: 'Usterki',
                                                         eventsType: 'DAMAGE'

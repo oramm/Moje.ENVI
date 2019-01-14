@@ -70,10 +70,9 @@ class Collapsible {
             .css('display', 'block')
             .append($crudButtons);
 
-        $row.children(':last').append((item.$body!==undefined)? item.$body : this.makeBodyDom(item));
+        $row.children(':last').append((item.$bodyDom)? item.$bodyDom : this.makeBodyDom(item));
         this.addRowCrudButtons($row);
         return $row;
-        
     }
     
      /*
@@ -154,7 +153,7 @@ class Collapsible {
                 case "PENDING":  
                     var $oldRow = this.$collapsible.find('[itemid=' + item.id +']');
                     $oldRow.attr('itemid',item.id + '_toDelete');
-                    var $newRow = this.buildRow(this.makeItem(item));
+                    var $newRow = this.buildRow(this.makeItem(item, this.makeBodyDom(item)));
                     $newRow.append(this.makePreloader('preloader'+item.id))
                     $oldRow.after($newRow);
                     $oldRow.hide(1000);
@@ -211,8 +210,8 @@ class Collapsible {
      * do usunięcia
      */
     actionsMenuInitialise(){        
-        if (this.$addNewModal !== undefined)
-            this.$addNewModal.preppendTriggerButtonTo(this.$actionsMenu,"Dodaj wpis");
+        if (this.addNewModal !== undefined)
+            this.addNewModal.preppendTriggerButtonTo(this.$actionsMenu,"Dodaj wpis", this);
         this.filterInitialise();
 
     }
@@ -222,7 +221,7 @@ class Collapsible {
         this.$dom.find(".collapsible-header").click(function() {   
                                             _this.selectTrigger($(this).parent().attr("itemId"));
                                             $('.collapsible').find('.collapsible-header > .crudButtons')
-                                                .css('visibility', 'hidden')
+                                                .css('visibility', 'hidden');
                                             $(this).children('.crudButtons')
                                                 .css('visibility', 'visible');
                                             //_this.parentViewObjectSelectHandler.apply(_this.parentViewObject,[$(this).attr("id")]);

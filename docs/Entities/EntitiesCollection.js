@@ -17,11 +17,9 @@ class EntitiesCollection extends SimpleCollection {
               })
         this.parentId = initParamObject.parentId;
         this.status = initParamObject.status;
-        
-        if (this.isAddable) 
-            this.$addNewModal = new NewEntityModal(this.id + '_newEntityModal', 'Dodaj podmiot', this);
-        
-        this.editModal = new EditEntityModal(this.id + '_editEntityModal', 'Edytuj dane podmiotu', this);
+ 
+        this.addNewModal = new EntityModal(this.id + '_newEntityModal', 'Dodaj podmiot', this, 'ADD_NEW');
+        this.editModal = new EntityModal(this.id + '_editEntityModal', 'Edytuj dane podmiotu', this, 'EDIT');
         
         this.initialise(this.makeList());        
     }    
@@ -38,12 +36,12 @@ class EntitiesCollection extends SimpleCollection {
         (dataItem.email)? true : dataItem.email="";
         
         return {    id: dataItem.id,
-                        icon:   'business_center',
-                        title:  dataItem.name + ' <BR>' + 
-                                addressLabel,
-                        description:    taxNumberLabel +
-                                        '<a href="'+ dataItem.www + 'target="_blank">' +dataItem.www + '</a> ' +
-                                        '<a href="mailto:'+ dataItem.email +'">' + dataItem.email + '</a>'
+                    icon:   'business_center',
+                    title:  dataItem.name + ' <BR>' + 
+                            addressLabel,
+                    description:    taxNumberLabel +
+                                    '<a href="'+ dataItem.www + 'target="_blank">' +dataItem.www + '</a> ' +
+                                    '<a href="mailto:'+ dataItem.email +'">' + dataItem.email + '</a>'
                 };
     }
 }

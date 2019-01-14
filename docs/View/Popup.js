@@ -5,7 +5,7 @@ class Popup{
                              '</div>';
         
 
-        this.loadingWheel = '<article>Loading...</article>' +
+        this.loadingWheel = '<article>Ładuję dane...</article>' +
                             '<div class="preloader-wrapper big active">' +
                                 '<div class="spinner-layer spinner-green-only">' +
                                   '<div class="circle-clipper left">' +

@@ -3,10 +3,12 @@ class SimpleCollapsible extends Collapsible {
         if (typeof itemsName  !== 'string') throw SyntaxError('itemsName must be specified as a second argument!');
         super(id, itemsName);
         this.connectedRepository = connectedRepository;
-        this.$bodyDoms=[];
+        this.$bodyDoms=[];  
+    }
+    initialize(){
+        super.initialise();
         this.makeBodyDoms();
     }
-
     makeCollapsibleItemsList(){
         var itemsList = [];
         for (var i=0; i<this.connectedRepository.items.length; i++){

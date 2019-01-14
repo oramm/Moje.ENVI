@@ -8,7 +8,7 @@ class MyTasksCollection extends SimpleCollection {
                connectedRepository: tasksRepository
               });
 
-        this.$addNewModal = new NewTaskModal(this.id + '_newTask', 'Dodaj zadanie', this);
+        this.addNewModal = new NewTaskModal(this.id + '_newTask', 'Dodaj zadanie', this);
         this.editModal = new EditTaskModal(this.id + '_editTask', 'Edytuj zadanie', this);
         
         this.initialise(this.makeList());        

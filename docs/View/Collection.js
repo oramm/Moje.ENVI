@@ -10,6 +10,8 @@ class Collection {
      *      @param {boolean} hasFilter - czy ma być filtr
      *      @param {boolean} isAddable - czy można dodować nowe elementy
      *      @param {boolean} isDeletable - czy można usuwać elementy
+     *      [@param {boolean} addNewModal]
+     *      [@param {boolean} EditModal]
      * }
      * @returns {Collection}
      */
@@ -17,13 +19,14 @@ class Collection {
         this.id = initParamObject.id;
         this.isPlain = initParamObject.isPlain;        
         this.title = (initParamObject.title === undefined)? "" : initParamObject.title;
-        this.isEditable = initParamObject.isEditable;
         this.isSelectable = (initParamObject.isSelectable  === undefined)? true : initParamObject.isSelectable;
         this.hasFilter = (initParamObject.hasFilter  === undefined)? true : initParamObject.hasFilter;
         this.hasFilter = (initParamObject.hasFilter  === undefined)? true : initParamObject.hasFilter;
         this.isAddable = (initParamObject.isAddable === undefined)? true : initParamObject.isAddable;
-        this.isDeletable = (initParamObject.isDeletable === initParamObject.undefined)? true : initParamObject.isDeletable;
-        
+        this.isDeletable = (initParamObject.isDeletable === undefined)? true : initParamObject.isDeletable;
+        this.isEditable = initParamObject.isEditable;
+        this.editModal = initParamObject.editModal;
+        this.addNewModal = initParamObject.addNewModal;
         this.$dom;
         this.$actionsMenu;
         this.$emptyList = $('<div class="emptyList">Lista jest pusta</div>');
@@ -48,8 +51,6 @@ class Collection {
         this.items = items;
         //this.parentViewObjectSelectHandler = parentViewObjectSelectHandler;
         //this.parentViewObject = parentViewObject;
-        if (this.isEditable===undefined)
-            this.isEditable = (this.editModal !== undefined)? true : false;
 
         this.buildDom();
         if (this.items.length === 0) {           
@@ -98,7 +99,7 @@ class Collection {
                     this.$collection.children('#' + item.tmpId).children('.progress').remove();
                     this.$collection.children('#' + item.tmpId).attr('id',item.id);
                     //.$('#preloader'+item.id).remove();
-                    if (this.editModal !== undefined) this.setEditAction();
+                    if (this.editModal) this.setEditAction();
                     if (this.isDeletable) this.setDeleteAction();
                     if (this.isSelectable) this.setSelectAction();
                     this.items.push(item);
@@ -234,12 +235,18 @@ class Collection {
                                         });
     }
     
+    setAddNewAction(){
+        this.$dom.find(".collectionItemAddNew").click(
+                                        ()=>this.addNewModal.triggerAction(this)
+                                        );
+    }
+    
     setEditAction(){
-        this.$dom.find(".collectionItemEdit").off('click');
+        //this.$dom.find(".collectionItemEdit").off('click');
         var _this = this;
         this.$dom.find(".collectionItemEdit").click(function(e) { 
                                         $(this).parent().parent().parent().parent().trigger('click');
-                                        _this.editModal.fillWithData();
+                                        _this.editModal.triggerAction(_this);
                                         //e.stopPropagation();
                                         //e.preventDefault();
                                         });
@@ -305,7 +312,8 @@ class Collection {
     addPlainRowCrudButtons($crudButtons){
         if (this.isEditable) 
             $crudButtons
-                .append('<span data-target="' + this.editModal.id + '" class="collectionItemEdit modal-trigger"><i class="material-icons">edit</i></span>')
+                .append(this.editModal.createTriggerIcon());
+                //.append('<span data-target="' + this.editModal.id + '" class="collectionItemEdit modal-trigger"><i class="material-icons">edit</i></span>')
         
         if (this.isDeletable) 
             $crudButtons
@@ -318,7 +326,7 @@ class Collection {
             button
                 .append('<a class="btn-floating"><i class="material-icons">menu</i></a>')
                 .append('<ul>');
-            if (this.editModal !== undefined) 
+            if (this.editModal) 
                 button.children('ul')
                     //data-target="' + this.id + '" class="btn modal-trigger"
                     .append('<li><a data-target="' + this.editModal.id + '" class="btn-floating blue collectionItemEdit modal-trigger"><i class="material-icons">edit</i></a></li>');
@@ -337,11 +345,11 @@ class Collection {
     }
 
     actionsMenuInitialise(){
-        if (this.isAddable)
-            if (this.isPlain)
-                this.$addNewModal.preppendTriggerIconTo(this.$actionsMenu)
-            else    
-                this.$addNewModal.preppendTriggerButtonTo(this.$actionsMenu,"Dodaj wpis");
+        if (this.isAddable){
+            this.$actionsMenu.prepend(this.addNewModal.createTriggerIcon());
+            this.setAddNewAction();
+        }
+            //this.addNewModal.preppendTriggerIconTo(this.$actionsMenu,this);
         if (this.hasFilter)
             this.filterInitialise();
 

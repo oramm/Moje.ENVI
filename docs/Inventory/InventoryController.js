@@ -26,7 +26,7 @@ class InventoryController {
         var promises = [];
         promises[0] = inventoryRepository.initialise();
         promises[1] = eventsRepository.initialise();
-        promises[2] = personsRepository.initialise();
+        promises[2] = personsRepository.initialise('ENVI_EMPLOYEE|MANAGER');
         
         Promise.all(promises)
             .then(()=>  {   console.log("Repositories initialised");

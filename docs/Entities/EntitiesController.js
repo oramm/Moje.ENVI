@@ -20,6 +20,9 @@ class EntitiesController {
             .then((res)=>  {   console.log(res); 
                                view.initialise();
                                $('.modal').modal();
+                               $('select').material_select();
+                               //ReachTextArea.reachTextAreaInit(); //nie ma tego typu pól w tym formularzu
+                               Materialize.updateTextFields();
                             })
             .catch(err => {
                   console.error(err);
