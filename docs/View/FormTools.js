@@ -157,7 +157,7 @@ class SelectField{
         return this.$dom;
     }
 
-    getItemChosen(){
+    getChosenItem(){
         var inputValue = this.$dom.find('input').val();
         if(typeof this.optionsData[0] !== 'object'){
             
@@ -339,6 +339,10 @@ class SelectFieldBrowserDefault{
         //if (isRequired)
         //    $select.attr('required','true')
         return this.$dom;
+    }
+    
+    getChosenItem(){
+        return this.chosenItem;
     }
     //uruchamiana na click
     setChosenItem(inputValue){
@@ -555,7 +559,7 @@ class Form {
                     break;
                 case 'SelectField' :
                 case 'SelectFieldBrowserDefault' :
-                    this.elements[i].input.getItemChosen();
+                    this.elements[i].input.getChosenItem();
                     if (typeof this.elements[i].input.chosenItem === 'object'){ 
                         
                         dataObject[this.elements[i].dataItemKeyName] =  this.elements[i].input.chosenItem; 

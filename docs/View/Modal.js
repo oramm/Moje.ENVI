@@ -110,29 +110,20 @@ class Modal {
      *                                  >> repository. addNewHandler >> personsRolesCollection.addNewHandler[DONE]
     */
     submitTrigger(){
-        //var tinyMCE = tinyMCE || undefined;
-        //if (tinyMCE) 
-            try {
-                tinyMCE.triggerSave();
-            } catch (e){console.log('Modal.submitTrigger():: TinyMCE not defined')}
+        try {
+            tinyMCE.triggerSave();
+        } catch (e){console.log('Modal.submitTrigger():: TinyMCE not defined')}
         var repository = this.connectedResultsetComponent.connectedRepository;
         //obiekt do zapisania danych z formularza
         var tmpDataObject = Tools.cloneOfObject(repository.currentItem);
         
         this.form.submitHandler(tmpDataObject);
         if (this.form.validate(tmpDataObject)){
-            // usatawić tutaj dodatkowe pola jrśli potrzebne
-            
-                
-            //if(!this.isDuplicate(tmpDataObject)){
                 repository.setCurrentItem(tmpDataObject);
                 if(this.mode==='EDIT')
                     repository.editItem(repository.currentItem, this.connectedResultsetComponent);
                 else
                    repository.addNewItem(repository.currentItem, this.connectedResultsetComponent); 
-            //} else {
-            //    alert("Taki wpis już jest w bazie!");
-            //}
         }
     }
 } 
