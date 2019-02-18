@@ -26,7 +26,7 @@ class SimpleRepository extends Repository {
     //najczęściej jest to projectId
     parentItemIdFromURL() {
         return new Promise((resolve, reject) => {
-            this.parentItemId = getUrlVars()['parentItemId'];
+            this.parentItemId = Tools.getUrlVars()['parentItemId'];
             
         });
     }

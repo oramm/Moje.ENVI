@@ -25,8 +25,8 @@ class PersonsCollection extends SimpleCollection {
                             dataItem.surname + ' <br>' +
                             dataItem._entity.name + ' <br>' +
                             dataItem.position,
-                    description:    '<a href="callto:'+ dataItem.cellphone +'">' +dataItem.cellphone + '</a><br> ' +
-                                    '<a href="callto:'+ dataItem.phone +'">' +dataItem.phone + '</a><br> ' +
+                    description:    '<a href="tel:'+ dataItem.cellphone +'">' +dataItem.cellphone + '</a><br> ' +
+                                    '<a href="tel:'+ dataItem.phone +'">' +dataItem.phone + '</a><br> ' +
                                     '<a href="mailto:'+ dataItem.email +'">' + dataItem.email + '</a><br><br>' + 
                                     dataItem.comment
                 };

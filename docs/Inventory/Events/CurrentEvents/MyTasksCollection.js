@@ -96,6 +96,6 @@ class MyTasksCollection extends SimpleCollection {
     
     selectTrigger(itemId){
         super.selectTrigger(itemId);
-        //$('#iframeCases').attr('src','../Cases/CasesList.html?milestoneId=' + this.connectedRepository.currentItem.projectId  + '&contractId=' + this.connectedRepository.currentItem.contractId);
+        //$('#contractDashboard').attr('src','../Cases/CasesList.html?milestoneId=' + this.connectedRepository.currentItem.projectId  + '&contractId=' + this.connectedRepository.currentItem.contractId);
     }
 }

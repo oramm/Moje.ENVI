@@ -10,7 +10,7 @@ class Repository {
       
     //@deprecated
     setItemSelectedItemIdFromURL(itemName) {
-        var item = getUrlVars()[itemName];
+        var item = Tools.getUrlVars()[itemName];
         if (item!= undefined)
             this.selectedItem = Tools.search(item,"id", this.items);
     }
