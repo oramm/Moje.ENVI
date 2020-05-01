@@ -31,10 +31,6 @@ class SimpleRepository extends Repository {
         });
     }
     
-    setCurrentItem(item) {
-        this.currentItem = item; 
-    }
-    
     //Krok 2 - wywoływana przy SUBMIT
     addNewItem(item, viewObject) {
         return new Promise((resolve, reject) => {

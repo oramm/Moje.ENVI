@@ -30,6 +30,6 @@ class EntityModal extends Modal {
      * @returns {undefined}
      */
     initAddNewData(){
-        this.connectedResultsetComponent.connectedRepository.currentItem.projectId = RolesSetup.rolesRepository.parentItemId; 
+        
     }
 };

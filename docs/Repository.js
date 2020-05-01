@@ -15,9 +15,9 @@ class Repository {
             this.selectedItem = Tools.search(item,"id", this.items);
     }
     
-    itemSelected(id) {
+    setCurrentItemById(id) {
         if (id === undefined) throw new SyntaxError("Selected item id must be specified!");
-        this.selectedItemId = id;
+        this.currentItemId = id;
         this.currentItem = Tools.search(parseInt(id),"id", this.items);
         
     }

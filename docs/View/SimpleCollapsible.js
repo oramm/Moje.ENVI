@@ -46,7 +46,7 @@ class SimpleCollapsible extends Collapsible {
     }
     
     selectTrigger(itemId){
-        this.connectedRepository.itemSelected(itemId);
+        this.connectedRepository.setCurrentItemById(itemId);
     }
     
 }

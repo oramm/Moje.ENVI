@@ -45,7 +45,7 @@ class Modal {
         var $triggerIcon = $('<SPAN data-target="' + this.id + '" ><i class="material-icons">' + iconType + '</i></SPAN>');
         //var _this = this;
         $triggerIcon
-            .addClass((this.mode==='ADD_NEW')? 'collectionItemAddNew' : 'collectionItemEdit')
+            .addClass((this.mode==='ADD_NEW')? 'addNewItemIcon' : 'collectionItemEdit')
             .addClass('modal-trigger')
         return $triggerIcon;                     
     }
@@ -119,7 +119,7 @@ class Modal {
         
         this.form.submitHandler(tmpDataObject);
         if (this.form.validate(tmpDataObject)){
-                repository.setCurrentItem(tmpDataObject);
+                repository.currentItem = tmpDataObject;
                 if(this.mode==='EDIT')
                     repository.editItem(repository.currentItem, this.connectedResultsetComponent);
                 else

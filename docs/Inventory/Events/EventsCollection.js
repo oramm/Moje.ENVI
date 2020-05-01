@@ -32,7 +32,8 @@ class EventsCollection extends SimpleCollection {
                     $title:  this.makeTitle(dataItem),
                     $description: this.makeDescription(dataItem),
                     parentId_Hidden:  dataItem.inventoryItemId,
-                    eventsType_Hidden:  dataItem.type                    
+                    eventsType_Hidden:  dataItem.type,
+                    dataItem: dataItem
                 };
     }
     /*

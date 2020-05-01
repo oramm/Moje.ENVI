@@ -41,7 +41,8 @@ class EntitiesCollection extends SimpleCollection {
                             addressLabel,
                     description:    taxNumberLabel +
                                     '<a href="'+ dataItem.www + 'target="_blank">' +dataItem.www + '</a> ' +
-                                    '<a href="mailto:'+ dataItem.email +'">' + dataItem.email + '</a>'
+                                    '<a href="mailto:'+ dataItem.email +'">' + dataItem.email + '</a>',
+                    dataItem: dataItem
                 };
     }
 }

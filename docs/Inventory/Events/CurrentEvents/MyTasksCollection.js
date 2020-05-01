@@ -30,7 +30,8 @@ class MyTasksCollection extends SimpleCollection {
         return {    id: dataItem.id,
                     $title:  this.makeTitle(dataItem),
                     $description:    this.makeDescription(dataItem),
-                    userEmail_Hidden:  dataItem.nameSurnameEmail
+                    userEmail_Hidden:  dataItem.nameSurnameEmail,
+                    dataItem: dataItem
                 };
     }
     /*

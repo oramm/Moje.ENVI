@@ -31,7 +31,8 @@ class ExternalAchievementsCollection extends SimpleCollection {
                                         dataItem.endDate + '</b>' +
                                         '<br>' +
                                         dataItem.description + '<BR>' +
-                                        dataItem.worksScope
+                                        dataItem.worksScope,
+                        dataItem: dataItem
                 };
     }
 }

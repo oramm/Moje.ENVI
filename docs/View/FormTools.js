@@ -754,12 +754,12 @@ class FormTools{
         
         radioButtons.click = function() {
                 alert($(this).val()+ "ssssss");
-                repository.selectedItemId = $(this).val();
+                repository.currentItemId = $(this).val();
                 };
                 
         $("[name^="+ name +"]").click(function() {
                 alert($(this).val());
-                repository.selectedItemId = $(this).val();
+                repository.currentItemId = $(this).val();
                 });
         return radioButtons;
     }

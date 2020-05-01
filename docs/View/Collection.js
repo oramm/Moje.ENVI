@@ -236,7 +236,7 @@ class Collection {
     }
     
     setAddNewAction(){
-        this.$dom.find(".collectionItemAddNew").click(
+        this.$dom.find(".addNewItemIcon").click(
                                         ()=>this.addNewModal.triggerAction(this)
                                         );
     }

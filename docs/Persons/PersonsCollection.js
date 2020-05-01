@@ -28,7 +28,8 @@ class PersonsCollection extends SimpleCollection {
                     description:    '<a href="tel:'+ dataItem.cellphone +'">' +dataItem.cellphone + '</a><br> ' +
                                     '<a href="tel:'+ dataItem.phone +'">' +dataItem.phone + '</a><br> ' +
                                     '<a href="mailto:'+ dataItem.email +'">' + dataItem.email + '</a><br><br>' + 
-                                    dataItem.comment
+                                    dataItem.comment,
+                    dataItem: dataItem
                 };
     }
 }
