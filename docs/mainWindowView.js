@@ -7,7 +7,7 @@ class MainWindowView extends Popup{
     }
     
     initialise(){
-        this.navigationBar = new MeNavigationBar(this)
+        this.navigationBar = new MeNavigationBar(this);
         console.log("Main window initialised");
 
     }

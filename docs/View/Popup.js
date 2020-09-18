@@ -31,8 +31,12 @@ class Popup{
         $(HTMLElement).remove();
     }
 
-    setTittle(tittle) {
-       $("#tittle").html("<H4>" + tittle + "</h4>");  
+    setTittle(title) {
+       $("#title").html("<H4>" + title + "</h4>");  
+    }
+    
+    makeSubTittle(title) {
+       return $("<H5>" + title + "</h5>");  
     }
     
     setStatus(message) {

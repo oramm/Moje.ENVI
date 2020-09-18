@@ -5,7 +5,7 @@
  * 2. dodajemy $dom do formularza
  * 3. wywołujemy initialise();
  */
-class AutoCompleteTextField {
+class AutoCompleteTextField_1 {
     constructor(id, label, icon, isRequired){
         this.id = id;
         this.label = label;
@@ -63,7 +63,7 @@ class AutoCompleteTextField {
            data: autocompleteList,
            limit: 20, // The max amount of results that can be shown at once. Default: Infinity.
            onAutocomplete: (inputValue) => {
-                                this.setChosenItem(inputValue);
+                                this.setValue(inputValue);
                                 if (typeof this.onCompleteCallBack === "function") { 
                                     this.onCompleteCallBack.apply(this.viewObject,[inputValue]);
                                 }
@@ -72,32 +72,11 @@ class AutoCompleteTextField {
              });
         }
 
-    setChosenItem(inputValue){
-            this.chosenItem = search(inputValue, this.key, this.repository.items);
+    setValue(inputValue){
+            this.chosenItem = Tools.search(inputValue, this.key, this.repository.items);
             this.repository.selectedItem = this.chosenItem;
             if (this.chosenItem !== undefined) this.$dom.children('input').attr('pattern','^' + inputValue + '$')
             this.$dom.children('input').val(inputValue);
             
-    }
-}
-
-class FormTools{
-    static createFlatButton(caption, onClickFunction,viewObject){
-        var $button = $('<input type="button" ' +
-                               'value="' + caption  +'" ' + 
-                               'class="waves-effect waves-teal btn-flat"' +
-                        '/>');
-        $button.click(function() {onClickFunction.apply(viewObject,[])});
-        return $button;
-    }
-
-    static createRaisedButton(caption, onClickFunction,viewObject){
-        var $button = $('<input type="button" ' +
-                               'value="' + caption  +'" ' + 
-                               'class="waves-effect waves-teal btn"' +
-                        '/>');
-        
-        $button.click(onClickFunction.apply(viewObject,[]));
-        return $button;
     }
 }

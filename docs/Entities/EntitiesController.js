@@ -12,9 +12,9 @@ class EntitiesController {
             'editEntityInDb',
             'deleteEntity');
 
-        var promises = [];
-
-        promises[0] = entitiesRepository.initialise();
+        var promises = [
+            entitiesRepository.initialise()
+        ];
 
         Promise.all(promises)
             .then((res) => {
