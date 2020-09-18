@@ -1,7 +1,14 @@
 class SimpleCollection extends Collection {
-    constructor(id, connectedRepository){
-        super(id);
-        this.connectedRepository = connectedRepository;
+    /*
+     * 
+     * @param {String} id - używane w HTML musi być unikatowe
+     * @param {Repository} connectedRepository
+     * @param {Boolean} isPlane
+     * @returns {SimpleCollection}
+     */
+    constructor(initParamObject){
+        super(initParamObject);
+        this.connectedRepository = initParamObject.connectedRepository;
         //this.initialise(this.makeList());
     }
     
@@ -20,7 +27,7 @@ class SimpleCollection extends Collection {
     */
     addNewHandler(status, dataItem, errorMessage){                                 
         var collectionItem = this.makeItem(dataItem);
-        collectionItem.tmpId = dataItem.tmpId;
+        collectionItem._tmpId = dataItem._tmpId;
         return super.addNewHandler(status, collectionItem, errorMessage);
     } 
     
@@ -42,17 +49,19 @@ class SimpleCollection extends Collection {
 
      */
     removeTrigger(itemId){
-        var item = search(parseInt(itemId),"id", this.connectedRepository.items);
+        var item = Tools.search(parseInt(itemId),"id", this.connectedRepository.items);
 
         this.connectedRepository.deleteItem(item, this)
             .catch(err => {
                       console.error(err);
+                      throw err;
+
                     });
     }
     
     
     selectTrigger(itemId){
-        var item = Tools.search(parseInt(itemId), 'id', this.connectedRepository.items);   
+        var item = Tools.search(parseInt(itemId), 'id', this.connectedRepository.items);
         this.connectedRepository.currentItem = item;
     }
     
