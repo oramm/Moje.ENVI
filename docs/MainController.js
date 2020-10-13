@@ -6,5 +6,12 @@ class MainController {
         mainWindowView.dataLoaded(false);
         mainWindowView.initialise();
         mainWindowView.dataLoaded(true);
+        sessionStorage.setItem('Current User', JSON.stringify({
+            name: gAuth.userName,
+            surname: '',
+            systemEmail: gAuth.userEmail,
+            googleImage: gAuth.userGoogleImage
+        })
+        );
     }
 }

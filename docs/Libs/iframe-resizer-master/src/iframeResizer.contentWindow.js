@@ -1284,5 +1284,22 @@
   addEventListener(window, 'readystatechange', chkLateLoaded)
   chkLateLoaded()
 
-  
+  // TEST CODE START //
+
+  // Create test hooks
+
+  function mockMsgListener(msgObject) {
+    receiver(msgObject)
+    return win
+  }
+
+  win = {}
+
+  removeEventListener(window, 'message', receiver)
+
+  define([], function() {
+    return mockMsgListener
+  })
+
+  // TEST CODE END //
 })()

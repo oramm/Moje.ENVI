@@ -21,13 +21,14 @@ class MeNavigationBar extends NavigationBar {
       link: 'Persons/persons.html'
     },
     {
+      caption: "Faktury",
+      link: 'Invoices/Invoices.html'
+    },
+    {
       caption: "Doświadczenie osób",
       link: 'Persons/ExternalAchievements/externalAchievements.html'
     },
-    {
-      caption: "Pojazdy i sprzęt",
-      link: 'Inventory/Inventory.html'
-    },
+    
     {
       caption: "Witryna projektów",
       link: 'https://ps.envi.com.pl/'
