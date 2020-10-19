@@ -82,7 +82,7 @@ class Filter {
                     }
                     break;
                 case 'SelectField':
-                    if ($row.attr(this.filterElements[i].attributeToCheck) != this.filterElements[i].input.getValue())
+                    if (this.filterElements[i].input.getValue() && $row.attr(this.filterElements[i].attributeToCheck) != this.filterElements[i].input.getValue())
                         return false
                     break
             }
@@ -136,7 +136,7 @@ class Filter {
         return textField;
     }
     createSelectField(filterElement) {
-        var selectField = new SelectField(this.id + this.filterElements.length, filterElement.label);
+        var selectField = new SelectField(this.id + this.filterElements.length, filterElement.label, undefined, false, 'Wszystkie');
         selectField.initialise(filterElement.selectItems, filterElement, this.changeFilterCriteriaHandler, this);
         return selectField;
     }

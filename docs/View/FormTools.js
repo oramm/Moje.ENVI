@@ -129,7 +129,7 @@ class SelectField {
      * @param {type} isRequired
      * @returns {SelectField}
      */
-    constructor(id, label, icon, isRequired) {
+    constructor(id, label, icon, isRequired, defaultDisabledOption = "Wybierz opcję") {
         this.id = id;
         this.label = label;
         this.icon = icon;
@@ -137,7 +137,7 @@ class SelectField {
         this.chosenItem;
         this.$dom;
         this.$select;
-        this.defaultDisabledOption = "Wybierz opcję";
+        this.defaultDisabledOption = defaultDisabledOption;
         this.buildDom(id, label, icon, isRequired);
     }
 
@@ -559,7 +559,7 @@ class SelectFieldBrowserDefault {
         else
             this.optionsData = optionsData;
 
-        this.$select.append('<option value="" disabled selected>Wybierz opcję</option>')
+        this.$select.append('<option value="" disabled selected>' + this.defaultDisabledOption + '</option>')
         for (var i in optionsData) {
             var $option = $('<option>')
                 .val(optionsData[i].name)
@@ -810,8 +810,8 @@ class Form {
                 .append(element.input.$dom);
         }
         this.$dom.append(FormTools.createSubmitButton(this.submitCaption));
-        
-        if (this.noRows){
+
+        if (this.noRows) {
             let $tmpDom = this.$dom;
             this.$dom = $('<div class="row">');
             this.$dom.append($tmpDom);
