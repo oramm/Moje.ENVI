@@ -2,6 +2,7 @@ class Resultset{
     constructor(initParamObject) {
         this.id = initParamObject.id;
         this.parentDataItem = initParamObject.parentDataItem;
+        this.parentViewObject = initParamObject.parentViewObject;
         this.title = (initParamObject.title === undefined) ? "" : initParamObject.title;
         this.isSelectable = (initParamObject.isSelectable === undefined) ? true : initParamObject.isSelectable;
         this.hasFilter = (initParamObject.hasFilter === undefined) ? true : initParamObject.hasFilter;

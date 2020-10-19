@@ -109,7 +109,7 @@ class AutoCompleteTextField {
             this.setValue(this.objectList[0])
     }
 
-    clearInput(){
+    clearInput() {
         this.$dom.children('input').val('');
     }
     clearChosenItem() {
@@ -627,6 +627,7 @@ class DatePicker {
         this.$dom
             .append(this.$input)
             .append($label);
+        this.$input.pickadate(MainSetup.datePickerSettings);
         return this.$dom;
     }
     //https://stackoverflow.com/questions/30324552/how-to-set-the-date-in-materialize-datepicker
@@ -636,6 +637,9 @@ class DatePicker {
         // Use the picker object directly.
         var picker = $generatedInput.pickadate('picker')
         picker.set('select', date, { format: 'yyyy-mm-dd' })
+    }
+    getValue() {
+        return this.$input.val();
     }
 
     validate() {
@@ -779,27 +783,39 @@ class Tabs {
 }
 
 class Form {
-    constructor(id, method, elements) {
+    constructor(id, method, elements, noRows = false, submitCaption = 'Zapisz') {
         this.id = id;
         this.method = method;
         this.elements = elements;
+        this.noRows = noRows;
+        this.submitCaption = submitCaption;
         this.$dom;
         this.buidDom();
         this.dataObject //do refactoringu w przyszłości przenieść tu obsługę SubmitRrigger() z modali
+
     }
 
     buidDom() {
         this.$dom = $('<form id="' + this.id + '" method="' + this.method + '">');
-        for (var i = 0; i < this.elements.length; i++) {
+        for (const element of this.elements) {
             var $inputDescription = '';
-            if (this.elements[i].description)
-                $inputDescription = $('<span class="envi-input-description">' + this.elements[i].description + '</span>')
-            this.$dom
-                .append('<div class="row">').children(':last-child')
+            if (element.description)
+                $inputDescription = $('<span class="envi-input-description">' + element.description + '</span>')
+            var $inputContainer = $('<div>')
+            if (!this.noRows)
+                $inputContainer.addClass('row');
+            this.$dom.append($inputContainer);
+            $inputContainer
                 .append($inputDescription)
-                .append(this.elements[i].input.$dom);
+                .append(element.input.$dom);
         }
-        this.$dom.append(FormTools.createSubmitButton("Zapisz"));
+        this.$dom.append(FormTools.createSubmitButton(this.submitCaption));
+        
+        if (this.noRows){
+            let $tmpDom = this.$dom;
+            this.$dom = $('<div class="row">');
+            this.$dom.append($tmpDom);
+        }
     }
     /*
      * Ustawia opis elementu formularza
@@ -871,7 +887,7 @@ class Form {
                 case 'CollapsibleMultiSelect':
                     test = this.elements[i].input.validate(dataObject[this.elements[i].input.dataItemKeyName]);
                     if (!test) {
-                        alert('Źle wypełnione pole "' + this.elements[i].input.name +'"');
+                        alert('Źle wypełnione pole "' + this.elements[i].input.name + '"');
                         return false;
                     }
                     break;

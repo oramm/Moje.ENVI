@@ -6,7 +6,7 @@ class InvoicesCollapsible extends SimpleCollapsible {
             isEditable: true,
             isAddable: true,
             isDeletable: true,
-            hasArchiveSwitch: true,
+            hasArchiveSwitch: false,
             connectedRepository: InvoicesSetup.invoicesRepository
             //subitemsCount: 12
         });
@@ -18,7 +18,18 @@ class InvoicesCollapsible extends SimpleCollapsible {
         this.addNewInvoiceItemModal = new InvoiceItemModal(this.id + '_newInvoiceItem', 'Dodaj pozycję', this, 'ADD_NEW');
         this.editInvoiceItemModal = new InvoiceItemModal(this.id + '_editInvoiceItem', 'Edytuj pozycję', this, 'EDIT');
 
-        this.initialise(this.makeCollapsibleItemsList());
+        var filterElements = [
+            {
+                inputType: 'SelectField',
+                colSpan: 6,
+                label: 'Status',
+                attributeToCheck: 'status',
+                selectItems: InvoicesSetup.statusNames
+            }
+        ];
+        this.currencyFormatter = new Intl.NumberFormat('pl-PL', { style: 'currency', currency: 'PLN' });
+
+        this.initialise(this.makeCollapsibleItemsList(),filterElements);
         //trzeba zainicjować dane parentów na wypadek dodania nowego obiektu
         //funkcja Modal.submitTrigger() bazuje na danych w this.connectedRepository.currentItem
         this.connectedRepository.currentItem.projectId = this.connectedRepository.parentItemId;
@@ -29,16 +40,16 @@ class InvoicesCollapsible extends SimpleCollapsible {
      * @returns {Collapsible.Item}
      */
     makeItem(dataItem, $bodyDom) {
-        var numberLabel = (dataItem.number) ? dataItem.number : '';
+        var numberLabel = (dataItem.number) ? '<em>' + dataItem.number + '</em> | ' : '';
         var entityLabel = dataItem._entity.name
-        var valueLabel = 'Netto: ' + new Intl.NumberFormat('pl-PL', { style: 'currency', currency: 'PLN' }).format(dataItem.value);
-        var ourId = (dataItem._contract.ourId) ? '<strong>' + dataItem._contract.ourId + '</strong>; ' : '';
-        var name = numberLabel + '; ' + ourId + ', ' + entityLabel + ', ' + dataItem.description + '; ' + valueLabel + '<br>'
-        name += 'Data Sprzedaży: ' + dataItem.issueDate;
+        var valueLabel = ''//'Netto: ' + this.currencyFormatter.format(dataItem.value);
+        var ourId = (dataItem._contract.ourId) ? '<strong>' + dataItem._contract.ourId + '</strong> | ' : '';
+        var name = numberLabel + ourId + entityLabel + ', ' + dataItem.description + '; ' + valueLabel + '<br>'
+        name += 'Data Sprzedaży: <em>' + dataItem.issueDate + '</em>';
         if (dataItem.status.match(/Zrobion|Wysła|Zapła/i)) {
-            name += ', Data wystawienia: ' + dataItem.creationDate;
+            name += ', Data wystawienia: <em>' + dataItem.creationDate + '</em>';
             if (dataItem.status.match(/Wysła|Zapła/i))
-                name += ', Data nadania: ' + dataItem.sentDate;
+                name += ', Data nadania: <em>' + dataItem.sentDate + '</em>';
         }
         name += '<br><strong>' + dataItem.status + '</strong>';
         return {
@@ -46,28 +57,25 @@ class InvoicesCollapsible extends SimpleCollapsible {
             name: name,
             $body: $bodyDom,
             dataItem: dataItem,
-            editModal: this.editModal
+            editModal: this.editModal,
+            attributes: [{ name: 'status', value: dataItem.status }]
         };
     }
 
     makeBodyDom(dataItem) {
         var timestamp = (dataItem._lastUpdated) ? Tools.timestampToString(dataItem._lastUpdated) : '[czas wyświetli po odświeżeniu]'
-        
         var $panel = $('<div>')
             .attr('id', 'collapsibleBodyForInvoice' + dataItem.id)
-            .attr('invoiceid', dataItem.id)
             .append(new InvoiceItemsCollection({
                 id: 'invoiceitemsListCollection_' + dataItem.id,
                 title: "Pozycje",
                 addNewModal: this.addNewInvoiceItemModal,
                 editModal: this.editInvoiceItemModal,
-                parentDataItem: dataItem
+                parentDataItem: dataItem,
+                parentViewObject: this
             }).$dom)
             .append($('<span class="comment">Ostania zmiana: ' + timestamp + ' ' +
                 'przez&nbsp;' + dataItem._editor.name + '&nbsp;' + dataItem._editor.surname + '</span>'));
         return $panel;
     }
-
-
-
 }

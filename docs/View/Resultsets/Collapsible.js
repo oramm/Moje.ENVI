@@ -56,6 +56,7 @@ class Collapsible extends Resultset {
     }
 
     buildDom() {
+        var i = 0;
         for (const item of this.items) {
             var row = this.buildRow(item);
             this.$collapsible
@@ -93,6 +94,10 @@ class Collapsible extends Resultset {
         row.$crudButtons
             .css('visibility', 'hidden');
 
+        if (item.attributes)
+            for (const attribute of item.attributes) {
+                row.$dom.attr(attribute.name, attribute.value);
+            }
         row.$dom
             .append('<div class="collapsible-header"><i class="material-icons">filter_list</i>' + item.name)
             .append('<div class="collapsible-body">')

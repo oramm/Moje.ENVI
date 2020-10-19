@@ -6,10 +6,10 @@ class InvoicesController {
         view.dataLoaded(false);
         //signoutButton.style.display = 'block';
         InvoicesSetup.personsRepository = new SimpleRepository('Persons repository',
-        'getPersonsList',
-        'addNewPersonInDb',
-        'editPersonInDb',
-        'deletePerson');
+            'getPersonsList',
+            'addNewPersonInDb',
+            'editPersonInDb',
+            'deletePerson');
 
         InvoicesSetup.entitiesRepository = new SimpleRepository('Entities repository',
             'getEntitiesList',
@@ -38,22 +38,25 @@ class InvoicesController {
 
         var promises = [
             InvoicesSetup.personsRepository.initialise(),
-            InvoicesSetup.invoicesRepository.initialise(),
-            InvoicesSetup.invoiceitemsRepository.initialise(),
+
             InvoicesSetup.entitiesRepository.initialise(),
             InvoicesSetup.contractsRepository.initialise({ onlyOur: true, onlyKeyData: true }),
         ];
 
         Promise.all(promises)
-            .then((res) => {
-                console.log(res);
-                view.initialise();
+            .then(() => {
+                console.log("Repositories initialised");
+                return view.initialise();
+            })
+            .then(() => {
                 $('select').material_select();
                 $('.modal').modal();
-                $('.datepicker').pickadate(MainSetup.datePickerSettings);
                 ReachTextArea.reachTextAreaInit();
                 Materialize.updateTextFields();
-            })
+                $('ul.tabs').tabs();
+                iFrameResize({ log: false, heightCalculationMethod: 'taggedElement', checkOrigin: false });
+            }
+            )
             .catch(err => {
                 console.error(err);
             });

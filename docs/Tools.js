@@ -45,6 +45,10 @@ class Tools {
         }
     }
 
+    static dateJStoYMD(inputDate) {
+        return this.dateDMYtoYMD(this.dateJStoDMY(inputDate));
+    }
+
     static daysToMilliseconds(days) {
         return days * 24 * 60 * 60 * 1000;
     }

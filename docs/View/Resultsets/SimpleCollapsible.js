@@ -9,11 +9,13 @@ class SimpleCollapsible extends Collapsible {
 
     makeCollapsibleItemsList() {
         var itemsList = [];
-        var i = 0;
-        for (const item of this.connectedRepository.items) {
-            itemsList.push(this.makeItem(item,
-                this.$bodyDoms[i++])
-            );
+        if (this.connectedRepository.items) {
+            var i = 0;
+            for (const item of this.connectedRepository.items) {
+                itemsList.push(this.makeItem(item,
+                    this.$bodyDoms[i++])
+                );
+            }
         }
         return itemsList;
     }

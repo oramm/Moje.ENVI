@@ -81,6 +81,10 @@ class Filter {
                             return false;
                     }
                     break;
+                case 'SelectField':
+                    if ($row.attr(this.filterElements[i].attributeToCheck) != this.filterElements[i].input.getValue())
+                        return false
+                    break
             }
         return true;
     }
@@ -95,6 +99,9 @@ class Filter {
                 break;
             case 'FilterSwitchInput':
                 filterElement.input = new FilterSwitchInput(filterElement.onLabel, filterElement.offLabel, this);
+                break;
+            case 'SelectField':
+                filterElement.input = this.createSelectField(filterElement);
                 break;
             default:
                 throw new Error(filterElement.inputType + " to niewłaściwy typ pola filtrującego!")
@@ -128,11 +135,16 @@ class Filter {
         });
         return textField;
     }
+    createSelectField(filterElement) {
+        var selectField = new SelectField(this.id + this.filterElements.length, filterElement.label);
+        selectField.initialise(filterElement.selectItems, filterElement, this.changeFilterCriteriaHandler, this);
+        return selectField;
+    }
 
     totalElementsColsPan() {
         var colSpan = 0;
-        for (var i = 1; i < this.filterElements.length; i++) {
-            colSpan += this.filterElements[i].colSpan;
+        for (const element of this.filterElements) {
+            colSpan += element.colSpan;
         }
         return colSpan;
     }
