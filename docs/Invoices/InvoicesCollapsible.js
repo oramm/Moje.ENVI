@@ -19,6 +19,7 @@ class InvoicesCollapsible extends SimpleCollapsible {
         this.editInvoiceItemModal = new InvoiceItemModal(this.id + '_editInvoiceItem', 'Edytuj pozycję', this, 'EDIT');
 
         var filterElements = [
+            /* tymczasowo ukryte do czasu usnięcia błedu z linkami do plików*/
             {
                 inputType: 'SelectField',
                 colSpan: 6,
@@ -26,10 +27,12 @@ class InvoicesCollapsible extends SimpleCollapsible {
                 attributeToCheck: 'status',
                 selectItems: InvoicesSetup.statusNames
             }
+            //*/
         ];
+
         this.currencyFormatter = new Intl.NumberFormat('pl-PL', { style: 'currency', currency: 'PLN' });
 
-        this.initialise(this.makeCollapsibleItemsList(),filterElements);
+        this.initialise(this.makeCollapsibleItemsList(), filterElements);
         //trzeba zainicjować dane parentów na wypadek dodania nowego obiektu
         //funkcja Modal.submitTrigger() bazuje na danych w this.connectedRepository.currentItem
         this.connectedRepository.currentItem.projectId = this.connectedRepository.parentItemId;
@@ -41,16 +44,13 @@ class InvoicesCollapsible extends SimpleCollapsible {
      */
     makeItem(dataItem, $bodyDom) {
         var numberLabel = (dataItem.number) ? '<em>' + dataItem.number + '</em> | ' : '';
-        var entityLabel = dataItem._entity.name
+        var entityLabel = dataItem._entity.name + '<br> ' + dataItem._entity.address + ' NIP: ' + dataItem._entity.taxNumber;
         var valueLabel = ''//'Netto: ' + this.currencyFormatter.format(dataItem.value);
         var ourId = (dataItem._contract.ourId) ? '<strong>' + dataItem._contract.ourId + '</strong> | ' : '';
-        var name = numberLabel + ourId + entityLabel + ', ' + dataItem.description + '; ' + valueLabel + '<br>'
+        var name = numberLabel + ourId + entityLabel + '; ' + valueLabel + '<br>'
         name += 'Data Sprzedaży: <em>' + dataItem.issueDate + '</em>';
-        if (dataItem.status.match(/Zrobion|Wysła|Zapła/i)) {
-            name += ', Data wystawienia: <em>' + dataItem.creationDate + '</em>';
-            if (dataItem.status.match(/Wysła|Zapła/i))
-                name += ', Data nadania: <em>' + dataItem.sentDate + '</em>';
-        }
+        if (dataItem.status.match(/Wysła|Zapła/i))
+            name += ', Data nadania: <em>' + dataItem.sentDate + '</em>';
         name += '<br><strong>' + dataItem.status + '</strong>';
         return {
             id: dataItem.id,
@@ -74,6 +74,7 @@ class InvoicesCollapsible extends SimpleCollapsible {
                 parentDataItem: dataItem,
                 parentViewObject: this
             }).$dom)
+            .append($('<span class="comment">Uwagi: ' + dataItem.description + '</span><br>'))
             .append($('<span class="comment">Ostania zmiana: ' + timestamp + ' ' +
                 'przez&nbsp;' + dataItem._editor.name + '&nbsp;' + dataItem._editor.surname + '</span>'));
         return $panel;

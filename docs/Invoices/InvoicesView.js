@@ -20,7 +20,7 @@ class InvoicesView extends Popup {
             colsPan: 4
         };
         this.startDateFormElement.input.setValue(new Date(new Date().getTime() - Tools.daysToMilliseconds(365)));
-        this.endDateFormElement.input.setValue(new Date());
+        this.endDateFormElement.input.setValue(new Date(new Date().getTime() + Tools.daysToMilliseconds(14)));
 
         this.filterRawPanel = new FilterRawPanel({
             formElements: [

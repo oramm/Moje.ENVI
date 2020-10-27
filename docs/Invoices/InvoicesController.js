@@ -38,7 +38,6 @@ class InvoicesController {
 
         var promises = [
             InvoicesSetup.personsRepository.initialise(),
-
             InvoicesSetup.entitiesRepository.initialise(),
             InvoicesSetup.contractsRepository.initialise({ onlyOur: true, onlyKeyData: true }),
         ];

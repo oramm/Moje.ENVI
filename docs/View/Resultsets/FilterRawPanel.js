@@ -67,8 +67,10 @@ class FilterRawPanel extends Resultset {
                         .then((res) => {
                             var oldResultset = _this.resultset;
                             _this.resultset = this.createResultset();
-                            oldResultset.$dom.replaceWith(_this.resultset.$dom)
-
+                            oldResultset.$dom.replaceWith(_this.resultset.$dom);
+                            return('collapsible made')
+                        })
+                        .then((res) => {
                             $('select').material_select();
                             $('.modal').modal();
                             $('.datepicker').pickadate(MainSetup.datePickerSettings);
@@ -78,7 +80,7 @@ class FilterRawPanel extends Resultset {
                             iFrameResize({ log: false, heightCalculationMethod: 'taggedElement', checkOrigin: false });
                             this.$dom.find('.progress').remove();
                             ReachTextArea.reachTextAreaInit();
-                        })
+                        });
                 } else
                     alert('Podaj prawidłowe kryteria');
             })

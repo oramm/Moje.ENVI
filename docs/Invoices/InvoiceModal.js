@@ -8,8 +8,6 @@ class InvoiceModal extends Modal {
         if (this.mode === 'EDIT')
             this.formElements.push(this.numberFormElement);
         this.formElements.push(this.contractFormElement);
-        this.formElements.push(this.descriptionFormElement);
-        this.formElements.push(this.creationDateFormElement);
         this.formElements.push(this.issueDateFormElement);
         this.formElements.push(this.daysToPayFormElement);
         this.formElements.push(this.entityFormElement);
@@ -17,6 +15,7 @@ class InvoiceModal extends Modal {
         this.formElements.push(this.ownerFormElement);
         if (this.mode === 'EDIT')
             this.formElements.push(this.fileFormElement);
+        this.formElements.push(this.descriptionFormElement);
 
         this.initialise();
     }
@@ -38,7 +37,7 @@ class InvoiceModal extends Modal {
 
         this.statusSelectField = new SelectField(this.id + '_status_SelectField', 'Status', undefined, true);
         this.statusSelectField.initialise(InvoicesSetup.statusNames);
-        
+
         this.ownerAutoCompleteTextField = new AutoCompleteTextField(this.id + '_ownerAutoCompleteTextField',
             'Koordynator',
             'person',
@@ -62,15 +61,6 @@ class InvoiceModal extends Modal {
             dataItemKeyName: '_contract',
         };
 
-        this.descriptionFormElement = {
-            input: new ReachTextArea(this.id + '_descriptonReachTextArea', 'Opis', false, 300),
-            dataItemKeyName: 'description'
-        };
-
-        this.creationDateFormElement = {
-            input: new DatePicker(this.id + '_creationDatePickerField', 'Data wystawienia', undefined, true),
-            dataItemKeyName: 'creationDate'
-        };
         this.issueDateFormElement = {
             input: new DatePicker(this.id + '_issueDatePickerField', 'Data sprzedaży', undefined, true),
             dataItemKeyName: 'issueDate'
@@ -103,6 +93,11 @@ class InvoiceModal extends Modal {
             description: '',
             dataItemKeyName: '_blobEnviObjects',
 
+        };
+        this.descriptionFormElement = {
+            input: new ReachTextArea(this.id + '_descriptonReachTextArea', 'Uwagi', false, 300),
+            description: 'Tutaj podaj uwagi do uwzględnienia przy tej fakturze. Nie znajdą się one na fakturze. Nie myl tego pola z opisem pozycji faktury',
+            dataItemKeyName: 'description'
         };
     }
 
