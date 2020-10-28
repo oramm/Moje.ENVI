@@ -14,6 +14,7 @@ class InvoicesCollapsible extends SimpleCollapsible {
         this.addNewModal = new InvoiceModal(id + '_newInvoice', 'Rejestruj fakturę', this, 'ADD_NEW');
         this.editModal = new InvoiceModal(id + '_editInvoice', 'Edytuj fakturę', this, 'EDIT');
 
+        this.appendInvoiceAttachmentsModal = new AppendInvoiceAttachmentsModal(id + '_appendInvoiceAttachmentModal', 'Wystaw fakturę', this, 'EDIT');
 
         this.addNewInvoiceItemModal = new InvoiceItemModal(this.id + '_newInvoiceItem', 'Dodaj pozycję', this, 'ADD_NEW');
         this.editInvoiceItemModal = new InvoiceItemModal(this.id + '_editInvoiceItem', 'Edytuj pozycję', this, 'EDIT');
@@ -63,9 +64,14 @@ class InvoicesCollapsible extends SimpleCollapsible {
     }
 
     makeBodyDom(dataItem) {
+        var $actionButtons = $('<div class="row">')
+        if (dataItem.status.match(/rob/i))
+            this.appendInvoiceAttachmentsModal.preppendTriggerButtonTo($actionButtons, 'Wystaw fakturę', this);
+
         var timestamp = (dataItem._lastUpdated) ? Tools.timestampToString(dataItem._lastUpdated) : '[czas wyświetli po odświeżeniu]'
         var $panel = $('<div>')
             .attr('id', 'collapsibleBodyForInvoice' + dataItem.id)
+            .append($actionButtons)
             .append(new InvoiceItemsCollection({
                 id: 'invoiceitemsListCollection_' + dataItem.id,
                 title: "Pozycje",

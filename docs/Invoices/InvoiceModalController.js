@@ -18,8 +18,7 @@ class InvoiceModalController {
         };
         InvoicesSetup.entitiesRepository.currentItems = [];
         InvoicesSetup.contractsRepository.currentItems = [];
-        //this.caseSelectFieldInitialize();
-        this.modal.creationDateFormElement.input.setValue(new Date());
+
         this.modal.issueDateFormElement.input.setValue(new Date());
     }
 };

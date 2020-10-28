@@ -5,16 +5,16 @@ class InvoiceModal extends Modal {
         this.initFormElements();
 
         this.formElements = [];
-        if (this.mode === 'EDIT')
-            this.formElements.push(this.numberFormElement);
+        //if (this.mode === 'EDIT')
+        //    this.formElements.push(this.numberFormElement);
         this.formElements.push(this.contractFormElement);
         this.formElements.push(this.issueDateFormElement);
         this.formElements.push(this.daysToPayFormElement);
         this.formElements.push(this.entityFormElement);
         this.formElements.push(this.statusFormElement);
         this.formElements.push(this.ownerFormElement);
-        if (this.mode === 'EDIT')
-            this.formElements.push(this.fileFormElement);
+        //if (this.mode === 'EDIT')
+        //    this.formElements.push(this.fileFormElement);
         this.formElements.push(this.descriptionFormElement);
 
         this.initialise();
