@@ -5,16 +5,12 @@ class InvoiceModal extends Modal {
         this.initFormElements();
 
         this.formElements = [];
-        //if (this.mode === 'EDIT')
-        //    this.formElements.push(this.numberFormElement);
         this.formElements.push(this.contractFormElement);
         this.formElements.push(this.issueDateFormElement);
         this.formElements.push(this.daysToPayFormElement);
         this.formElements.push(this.entityFormElement);
         this.formElements.push(this.statusFormElement);
         this.formElements.push(this.ownerFormElement);
-        //if (this.mode === 'EDIT')
-        //    this.formElements.push(this.fileFormElement);
         this.formElements.push(this.descriptionFormElement);
 
         this.initialise();
@@ -46,14 +42,6 @@ class InvoiceModal extends Modal {
         this.ownerAutoCompleteTextField.initialise(InvoicesSetup.personsRepository, "_nameSurnameEmail", undefined, this);
 
         this.invoiceFileInput = new FileInput(this.id + '_invoice_FileInput', 'Wybierz plik', this, this.mode === 'ADD_NEW');
-
-        var _this = this;
-
-        this.numberFormElement = {
-            input: new InputTextField(this.id + 'numberTextField', 'Numer', undefined, false, 9, '.{6,}'),
-            description: (this.mode == 'EDIT') ? 'Numer podajemy dopiero podczas wystawiania faktury' : '',
-            dataItemKeyName: 'number',
-        };
 
         this.contractFormElement = {
             input: this.contractSelectField,
@@ -88,12 +76,6 @@ class InvoiceModal extends Modal {
             dataItemKeyName: '_entity',
         };
 
-        this.fileFormElement = {
-            input: this.invoiceFileInput,
-            description: '',
-            dataItemKeyName: '_blobEnviObjects',
-
-        };
         this.descriptionFormElement = {
             input: new ReachTextArea(this.id + '_descriptonReachTextArea', 'Uwagi', false, 300),
             description: 'Tutaj podaj uwagi do uwzględnienia przy tej fakturze. Nie znajdą się one na fakturze. Nie myl tego pola z opisem pozycji faktury',

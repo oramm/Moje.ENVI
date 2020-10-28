@@ -15,6 +15,7 @@ class InvoicesCollapsible extends SimpleCollapsible {
         this.editModal = new InvoiceModal(id + '_editInvoice', 'Edytuj fakturę', this, 'EDIT');
 
         this.appendInvoiceAttachmentsModal = new AppendInvoiceAttachmentsModal(id + '_appendInvoiceAttachmentModal', 'Wystaw fakturę', this, 'EDIT');
+        this.invoiceSetAsSentModal = new InvoiceSetAsSentModal(id + '_invoiceSetAsSentModal', 'Ustaw jako wysłana', this, 'EDIT');
 
         this.addNewInvoiceItemModal = new InvoiceItemModal(this.id + '_newInvoiceItem', 'Dodaj pozycję', this, 'ADD_NEW');
         this.editInvoiceItemModal = new InvoiceItemModal(this.id + '_editInvoiceItem', 'Edytuj pozycję', this, 'EDIT');
@@ -65,8 +66,14 @@ class InvoicesCollapsible extends SimpleCollapsible {
 
     makeBodyDom(dataItem) {
         var $actionButtons = $('<div class="row">')
-        if (dataItem.status.match(/rob/i))
+        if (dataItem.status.match(/Na późn/i))
+            $actionButtons.append(new RaisedButton('Ustaw jako do zrobienia', this.setAsToMakeHandler, this).$dom)
+        if (dataItem.status.match(/Do zrob/i))
             this.appendInvoiceAttachmentsModal.preppendTriggerButtonTo($actionButtons, 'Wystaw fakturę', this);
+        else if (dataItem.status.match(/Zrobiona/i))
+            this.invoiceSetAsSentModal.preppendTriggerButtonTo($actionButtons, 'Ustaw jako wysłana', this);
+        else if (dataItem.status.match(/Wysła/i))
+            $actionButtons.append(new RaisedButton('Ustaw jako zapłacona', this.setAsPaidHandler, this).$dom)
 
         var timestamp = (dataItem._lastUpdated) ? Tools.timestampToString(dataItem._lastUpdated) : '[czas wyświetli po odświeżeniu]'
         var $panel = $('<div>')
@@ -84,5 +91,13 @@ class InvoicesCollapsible extends SimpleCollapsible {
             .append($('<span class="comment">Ostania zmiana: ' + timestamp + ' ' +
                 'przez&nbsp;' + dataItem._editor.name + '&nbsp;' + dataItem._editor.surname + '</span>'));
         return $panel;
+    }
+
+    setAsPaidHandler() {
+        this.connectedRepository.doChangeFunctionOnItem(this.connectedRepository.currentItem, 'setAsPaidInvoice', this);
+    }
+
+    setAsToMakeHandler() {
+        this.connectedRepository.doChangeFunctionOnItem(this.connectedRepository.currentItem, 'setAsToMakeInvoice', this);
     }
 }
