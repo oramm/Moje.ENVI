@@ -51,8 +51,10 @@ class InvoicesCollapsible extends SimpleCollapsible {
         var ourId = (dataItem._contract.ourId) ? '<strong>' + dataItem._contract.ourId + '</strong> | ' : '';
         var name = numberLabel + ourId + entityLabel + '; ' + valueLabel + '<br>'
         name += 'Data Sprzedaży: <em>' + dataItem.issueDate + '</em>';
-        if (dataItem.status.match(/Wysła|Zapła/i))
+        if (dataItem.status.match(/Wysła|Zapła/i)) {
             name += ', Data nadania: <em>' + dataItem.sentDate + '</em>';
+            name += ', Termin płatności: <em>' + dataItem.paymentDeadline+ '</em>';
+        }
         name += '<br><strong>' + dataItem.status + '</strong>';
         return {
             id: dataItem.id,
