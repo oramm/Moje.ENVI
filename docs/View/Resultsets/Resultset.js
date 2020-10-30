@@ -10,6 +10,7 @@ class Resultset{
         this.isAddable = (initParamObject.isAddable === undefined) ? true : initParamObject.isAddable;
         this.isDeletable = (initParamObject.isDeletable === undefined) ? true : initParamObject.isDeletable;
         this.isEditable = initParamObject.isEditable;
+        this.isCopyable = (initParamObject.isCopyable === undefined) ? false : initParamObject.isCopyable;
         this.hasArchiveSwitch = false;//initParamObject.hasArchiveSwitch;
         this.editModal = initParamObject.editModal;
         this.addNewModal = initParamObject.addNewModal;

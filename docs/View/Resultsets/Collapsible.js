@@ -30,11 +30,15 @@ class Collapsible extends Resultset {
     }
 
     $rowEditIcon(modalId) {
-        //if (!modalId) modalId = this.editModal.id;
         var $icon = $('<span class="collapsibleItemEdit modal-trigger"><i class="material-icons">edit</i></span>');;
         $icon.attr('data-target', modalId);
         return $icon;
     }
+
+    $rowCopyIcon() {
+        return $('<span class="collapsibleItemCopy"><i class="material-icons">content_copy</i></span>');
+    }
+
     $rowDeleteIcon() {
         return $('<span class="collapsibleItemDelete"><i class="material-icons">delete</i></span>');
     }
@@ -71,6 +75,7 @@ class Collapsible extends Resultset {
             this.$dom.prepend(this.$title)
 
         if (this.isEditable) this.setEditAction();
+        if (this.isCopyable) this.setCopyAction();
         if (this.isDeletable) this.setDeleteAction();
         if (this.isSelectable) this.setSelectAction();
     }
@@ -140,6 +145,8 @@ class Collapsible extends Resultset {
                 row.$crudButtons
                     .append(this.$rowDeleteIcon());
         }
+        if (this.isCopyable)
+            row.$crudButtons.append(this.$rowCopyIcon());
     }
 
     /*
@@ -158,6 +165,7 @@ class Collapsible extends Resultset {
                 //this.$collapsible.children('[itemid=' + item.tmpId +']').attr('itemid',item.id);
                 if (this.isEditable) this.setEditAction();
                 if (this.isDeletable) this.setDeleteAction();
+                if (this.isCopyable) this.setCopyAction();
                 if (this.isSelectable) this.setSelectAction();
                 this.items.push(this.makeItem(item));
                 return status;
@@ -204,6 +212,7 @@ class Collapsible extends Resultset {
                     $oldRow.last().after($newRow);
                     $oldRow.remove();
                     this.setEditAction();
+                    if (this.isCopyable) this.setCopyAction();
                     if (this.isDeletable) this.setDeleteAction();
                     if (this.isSelectable) this.setSelectAction();
                     break;
@@ -335,6 +344,16 @@ class Collapsible extends Resultset {
         this.$collapsible.find(".collapsibleItemDelete").click(function () {
             if (confirm("Czy na pewno chcesz usunąć ten element?"))
                 _this.removeTrigger($(this).parent().parent().parent().attr("itemId"));
+        });
+    }
+
+    setCopyAction() {
+        this.$dom.find(".collapsibleItemCopy").off('click');
+        var _this = this;
+        this.$collapsible.find(".collapsibleItemCopy").click(function () {
+            if (confirm("Chcesz skopiować ten element?"))
+                _this.connectedRepository.copyCurrentItem(_this);
+            if (_this.copyTrigger) _this.copyTrigger();
         });
     }
 

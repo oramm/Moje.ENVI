@@ -6,7 +6,7 @@ class InvoicesController {
         view.dataLoaded(false);
         //signoutButton.style.display = 'block';
         InvoicesSetup.personsRepository = new SimpleRepository('Persons repository',
-            'getPersonsList',
+            'getPersonsNameSurnameEmailListEnvi',
             'addNewPersonInDb',
             'editPersonInDb',
             'deletePerson');

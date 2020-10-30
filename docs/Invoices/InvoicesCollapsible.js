@@ -6,6 +6,7 @@ class InvoicesCollapsible extends SimpleCollapsible {
             isEditable: true,
             isAddable: true,
             isDeletable: true,
+            isCopyable: true,
             hasArchiveSwitch: false,
             connectedRepository: InvoicesSetup.invoicesRepository
             //subitemsCount: 12
@@ -35,9 +36,7 @@ class InvoicesCollapsible extends SimpleCollapsible {
         this.currencyFormatter = new Intl.NumberFormat('pl-PL', { style: 'currency', currency: 'PLN' });
 
         this.initialise(this.makeCollapsibleItemsList(), filterElements);
-        //trzeba zainicjować dane parentów na wypadek dodania nowego obiektu
-        //funkcja Modal.submitTrigger() bazuje na danych w this.connectedRepository.currentItem
-        this.connectedRepository.currentItem.projectId = this.connectedRepository.parentItemId;
+
     }
     /*
      * Przetwarza surowe dane z repozytorium na item gotowy dla Collapsible.buildRow()
@@ -50,10 +49,10 @@ class InvoicesCollapsible extends SimpleCollapsible {
         var valueLabel = ''//'Netto: ' + this.currencyFormatter.format(dataItem.value);
         var ourId = (dataItem._contract.ourId) ? '<strong>' + dataItem._contract.ourId + '</strong> | ' : '';
         var name = numberLabel + ourId + entityLabel + '; ' + valueLabel + '<br>'
-        name += 'Data Sprzedaży: <em>' + dataItem.issueDate + '</em>';
+        name += 'Data sprzedaży: <em>' + dataItem.issueDate + '</em>';
         if (dataItem.status.match(/Wysła|Zapła/i)) {
-            name += ', Data nadania: <em>' + dataItem.sentDate + '</em>';
-            name += ', Termin płatności: <em>' + dataItem.paymentDeadline+ '</em>';
+            name += ' Data nadania: <em>' + dataItem.sentDate + '</em>';
+            name += ' Termin płatności: <em>' + dataItem.paymentDeadline + '</em>';
         }
         name += '<br><strong>' + dataItem.status + '</strong>';
         return {

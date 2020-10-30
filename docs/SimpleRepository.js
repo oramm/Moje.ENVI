@@ -17,7 +17,7 @@ class SimpleRepository extends Repository {
         this.parentItemId = initParameter.parentItemId;
         if (typeof initParameter === 'string') {
             this.parentItemIdFromURL();
-            
+
             this.getItemsListServerFunctionName = getItemsListServerFunctionName
             this.addNewServerFunctionName = addNewServerFunctionName;
             this.editServerFunctionName = editServerFunctionName;
@@ -31,7 +31,7 @@ class SimpleRepository extends Repository {
             this.editServerFunctionName = initParameter.editServerFunctionName;
             this.deleteServerFunctionName = initParameter.deleteServerFunctionName;
         }
-        
+
     }
 
     initialise(serverFunctionParameters) {
@@ -63,7 +63,7 @@ class SimpleRepository extends Repository {
     }
 
     /*
-     * Krok 2 - Wywoływane przez trigger w klasie pochodnej po Collection
+     * Krok 2 - Wywoływane przez trigger w klasie pochodnej po Resultset
      */
     deleteItem(item, viewObject) {
         return new Promise((resolve, reject) => {
@@ -73,6 +73,10 @@ class SimpleRepository extends Repository {
                     resolve(this.name + ': item deleted');
                 });
         });
+    }
+
+    copyCurrentItem(viewObject) {
+        return this.addNewItem(this.currentItem, viewObject);
     }
 
     /*
