@@ -80,7 +80,7 @@ class SimpleRepository extends Repository {
         return new Promise((resolve) => {
             var tmpDataObject = Tools.cloneOfObject(this.currentItem);
             tmpDataObject.id = undefined;
-            resolve(this.addNewItem(tmpDataObject, viewObject));
+            resolve(super.addNewItem(tmpDataObject, this.copyServerFunctionName, viewObject));
         });
     }
 

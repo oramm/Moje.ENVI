@@ -28,7 +28,8 @@ class InvoicesController {
             'getInvoicesList',
             'addNewInvoice',
             'editInvoice',
-            'deleteInvoice');
+            'deleteInvoice',
+            'copyInvoice');
 
         InvoicesSetup.invoiceitemsRepository = new SimpleRepository('InvoiceItems repository',
             'getInvoiceItemsList',
