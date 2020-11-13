@@ -8,7 +8,7 @@ class InvoicesCollapsible extends SimpleCollapsible {
             isDeletable: true,
             isCopyable: true,
             hasArchiveSwitch: false,
-            connectedRepository: InvoicesSetup.invoicesRepository
+            connectedRepository: InvoicesSetup.invoicesRepository,
             //subitemsCount: 12
         });
 
@@ -22,7 +22,6 @@ class InvoicesCollapsible extends SimpleCollapsible {
         this.editInvoiceItemModal = new InvoiceItemModal(this.id + '_editInvoiceItem', 'Edytuj pozycję', this, 'EDIT');
 
         var filterElements = [
-            /* tymczasowo ukryte do czasu usnięcia błedu z linkami do plików*/
             {
                 inputType: 'SelectField',
                 colSpan: 6,
@@ -30,7 +29,6 @@ class InvoicesCollapsible extends SimpleCollapsible {
                 attributeToCheck: 'status',
                 selectItems: InvoicesSetup.statusNames
             }
-            //*/
         ];
 
         this.currencyFormatter = new Intl.NumberFormat('pl-PL', { style: 'currency', currency: 'PLN' });
@@ -43,7 +41,7 @@ class InvoicesCollapsible extends SimpleCollapsible {
      * @param {type} connectedRepository.items[i]
      * @returns {Collapsible.Item}
      */
-    makeItem(dataItem, $bodyDom) {
+    makeItem(dataItem, body) {
         var numberLabel = (dataItem.number) ? '<em>' + dataItem.number + '</em> | ' : '';
         var entityLabel = dataItem._entity.name + '<br> ' + dataItem._entity.address + ' NIP: ' + dataItem._entity.taxNumber;
         var valueLabel = ''//'Netto: ' + this.currencyFormatter.format(dataItem.value);
@@ -58,14 +56,14 @@ class InvoicesCollapsible extends SimpleCollapsible {
         return {
             id: dataItem.id,
             name: name,
-            $body: $bodyDom,
+            body: body,
             dataItem: dataItem,
             editModal: this.editModal,
             attributes: [{ name: 'status', value: dataItem.status }]
         };
     }
 
-    makeBodyDom(dataItem) {
+    makeBody(dataItem) {
         var $actionButtons = $('<div class="row">')
         if (dataItem.status.match(/Na późn/i))
             $actionButtons.append(new RaisedButton('Ustaw jako do zrobienia', this.setAsToMakeHandler, this).$dom)
@@ -76,22 +74,27 @@ class InvoicesCollapsible extends SimpleCollapsible {
         else if (dataItem.status.match(/Wysła/i))
             $actionButtons.append(new RaisedButton('Ustaw jako zapłacona', this.setAsPaidHandler, this).$dom)
 
+        var subCollection = new InvoiceItemsCollection({
+            id: 'invoiceitemsListCollection_' + dataItem.id,
+            title: "Pozycje",
+            addNewModal: this.addNewInvoiceItemModal,
+            editModal: this.editInvoiceItemModal,
+            parentDataItem: dataItem,
+            parentViewObject: this
+        });
+
         var timestamp = (dataItem._lastUpdated) ? Tools.timestampToString(dataItem._lastUpdated) : '[czas wyświetli po odświeżeniu]'
         var $panel = $('<div>')
             .attr('id', 'collapsibleBodyForInvoice' + dataItem.id)
             .append($actionButtons)
-            .append(new InvoiceItemsCollection({
-                id: 'invoiceitemsListCollection_' + dataItem.id,
-                title: "Pozycje",
-                addNewModal: this.addNewInvoiceItemModal,
-                editModal: this.editInvoiceItemModal,
-                parentDataItem: dataItem,
-                parentViewObject: this
-            }).$dom)
+            .append(subCollection.$dom)
             .append($('<span class="comment">Uwagi: ' + dataItem.description + '</span><br>'))
             .append($('<span class="comment">Ostania zmiana: ' + timestamp + ' ' +
                 'przez&nbsp;' + dataItem._editor.name + '&nbsp;' + dataItem._editor.surname + '</span>'));
-        return $panel;
+        return {
+            collection: subCollection,
+            $dom: $panel
+        };
     }
 
     setAsPaidHandler() {
@@ -100,5 +103,17 @@ class InvoicesCollapsible extends SimpleCollapsible {
 
     setAsToMakeHandler() {
         this.connectedRepository.doChangeFunctionOnItem(this.connectedRepository.currentItem, 'setAsToMakeInvoice', this);
+    }
+
+    copyHandler(originalItemId, newItemId) {
+        var invoiceItemsList = InvoicesSetup.invoiceitemsRepository.items.filter(
+            item => item._parent.id == originalItemId
+        );
+
+        for (var item of invoiceItemsList) {
+            item = Tools.cloneOfObject(item);
+            item._parent.id = newItemId;
+            InvoicesSetup.invoiceitemsRepository.copyItem(item, this.items[this.items.length - 1].body.collection);
+        }
     }
 }

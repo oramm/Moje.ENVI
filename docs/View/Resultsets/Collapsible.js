@@ -56,7 +56,7 @@ class Collapsible extends Resultset {
         this.buildDom();
 
         Tools.hasFunction(this.makeItem);
-        Tools.hasFunction(this.makeBodyDom);
+        Tools.hasFunction(this.makeBody);
     }
 
     buildDom() {
@@ -122,7 +122,9 @@ class Collapsible extends Resultset {
             .css('display', 'block')
             .append(row.$crudButtons);
 
-        row.$dom.children(':last').append((item.$body) ? item.$body : this.makeBodyDom(item.dataItem));
+        if (!item.body)
+            item.body = this.makeBody(item.dataItem);
+        row.$dom.children(':last').append(item.body.$dom);
         this.addRowCrudButtons(row);
         return row;
     }
@@ -152,36 +154,37 @@ class Collapsible extends Resultset {
     /*
      * funkcja wywoływana w repository, potrzebny trik z appply dla callbacka
      * @param {String} status
-     * @param {CollapsibleItem} item
+     * @param {dataItem} item
      * @param {String} errorMessage
      * @returns {Promise}
      */
-    addNewHandler(status, item, errorMessage) {
+    addNewHandler(status, dataItem, errorMessage) {
         switch (status) {
             case "DONE":
-                this.$collapsible.children('[itemid=' + item._tmpId + ']').remove();
-                this.$collapsible.prepend(this.buildRow(this.makeItem(item)).$dom);
-                //this.$collapsible.children('[itemid=' + item.tmpId +']').children('.progress').remove();
+                this.$collapsible.children('[itemid=' + dataItem._tmpId + ']').remove();
+                var newCollapsibleItem = this.makeItem(dataItem);
+                this.$collapsible.prepend(this.buildRow(newCollapsibleItem).$dom);
                 //this.$collapsible.children('[itemid=' + item.tmpId +']').attr('itemid',item.id);
                 if (this.isEditable) this.setEditAction();
                 if (this.isDeletable) this.setDeleteAction();
                 if (this.isCopyable) this.setCopyAction();
                 if (this.isSelectable) this.setSelectAction();
-                this.items.push(this.makeItem(item));
+                this.items.push(newCollapsibleItem);
                 return status;
                 break;
             case "PENDING":
                 if (this.items.length == 0) {
                     this.$dom.find('.emptyList').remove();
                 }
-                item.id = item._tmpId;
-                this.$collapsible.prepend(this.buildRow(this.makeItem(item)).$dom);
-                this.$collapsible.find('[itemid=' + item.id + ']').append(this.makePreloader('preloader' + item.id))
-                return item.id;
+                dataItem.id = dataItem._tmpId;
+                this.$collapsible.prepend(this.buildRow(this.makeItem(dataItem)).$dom);
+                this.$collapsible.find('[itemid=' + dataItem.id + ']').append(this.makePreloader('preloader' + dataItem.id))
+                return dataItem.id;
                 break;
             case "ERROR":
                 alert(errorMessage);
-                this.$collapsible.find('[itemid=' + item._tmpId + ']').remove();
+                console.error(errorMessage)
+                this.$collapsible.find('[itemid=' + dataItem._tmpId + ']').remove();
                 //$('#preloader'+item.id).remove();
                 if (this.items.length == 0) {
                     this.$dom.prepend(this.$emptyList);
@@ -198,17 +201,17 @@ class Collapsible extends Resultset {
      * @param {String} errorMessage
      * @returns {Promise}
      */
-    editHandler(status, item, errorMessage) {
+    editHandler(status, dataItem, errorMessage) {
         return new Promise((resolve, reject) => {
             switch (status) {
                 case "DONE":
-                    $('#preloader' + item.id).remove();
-                    this.items = this.items.filter(function (searchItem) { return searchItem.id !== item.id });
-                    var newItem = this.makeItem(item, this.makeBodyDom(item).$dom);
+                    $('#preloader' + dataItem.id).remove();
+                    this.items = this.items.filter(function (searchItem) { return searchItem.id !== dataItem.id });
+                    var newItem = this.makeItem(dataItem, this.makeBody(dataItem));
                     var $newRow = this.buildRow(newItem).$dom;
                     this.items.push(newItem);
 
-                    var $oldRow = this.$collapsible.find('[itemid^=' + item.id + ']');
+                    var $oldRow = this.$collapsible.find('[itemid^=' + dataItem.id + ']');
                     $oldRow.last().after($newRow);
                     $oldRow.remove();
                     this.setEditAction();
@@ -217,20 +220,20 @@ class Collapsible extends Resultset {
                     if (this.isSelectable) this.setSelectAction();
                     break;
                 case "PENDING":
-                    var $oldRow = this.$collapsible.find('[itemid=' + item.id + ']');
-                    $oldRow.attr('itemid', item.id + '_toDelete');
-                    var $newRow = this.buildRow(this.makeItem(item, this.makeBodyDom(item))).$dom;
-                    $newRow.append(this.makePreloader('preloader' + item.id))
+                    var $oldRow = this.$collapsible.find('[itemid=' + dataItem.id + ']');
+                    $oldRow.attr('itemid', dataItem.id + '_toDelete');
+                    var $newRow = this.buildRow(this.makeItem(dataItem, this.makeBody(dataItem))).$dom;
+                    $newRow.append(this.makePreloader('preloader' + dataItem.id))
                     $oldRow.after($newRow);
                     $oldRow.hide(1000);
 
                     break;
                 case "ERROR":
                     alert(errorMessage);
-                    this.$collapsible.find('[itemid=' + item.id + ']').remove();
-                    var $oldRow = this.$collapsible.find('[itemid=' + item.id + '_toDelete]');
+                    this.$collapsible.find('[itemid=' + dataItem.id + ']').remove();
+                    var $oldRow = this.$collapsible.find('[itemid=' + dataItem.id + '_toDelete]');
                     $oldRow.show(1000);
-                    $oldRow.attr('itemid', item.id);
+                    $oldRow.attr('itemid', dataItem.id);
                     if (this.items.length == 0) {
                         this.$dom.prepend(this.$emptyList);
                     }
@@ -342,8 +345,14 @@ class Collapsible extends Resultset {
         this.$dom.find(".collapsibleItemDelete").off('click');
         var _this = this;
         this.$collapsible.find(".collapsibleItemDelete").click(function () {
-            if (confirm("Czy na pewno chcesz usunąć ten element?"))
-                _this.removeTrigger($(this).parent().parent().parent().attr("itemId"));
+            if (confirm("Czy na pewno chcesz usunąć ten element?")) {
+                _this.connectedRepository.deleteItem(_this.connectedRepository.currentItem, _this);
+                if (_this.currentItems[0].body.collection)
+                    for(const collectIonItem of _this.currentItems[0].body.collection.items)
+                        _this.currentItems[0].body.collection.connectedRepository.clientSideDeleteItemHandler(collectIonItem);
+            
+            //_this.removeTrigger(_this.connectedRepository.currentItem.id);
+            }
         });
     }
 
@@ -351,9 +360,17 @@ class Collapsible extends Resultset {
         this.$dom.find(".collapsibleItemCopy").off('click');
         var _this = this;
         this.$collapsible.find(".collapsibleItemCopy").click(function () {
-            if (confirm("Chcesz skopiować ten element?"))
-                _this.connectedRepository.copyCurrentItem(_this);
-            if (_this.copyTrigger) _this.copyTrigger();
+            if (confirm("Chcesz skopiować ten element?")) {
+                var originalItemId = _this.connectedRepository.currentItem.id;
+                console.log('Id Oryginału: %s', originalItemId)
+                _this.connectedRepository.copyCurrentItem(_this)
+                    .then((copiedDataItem) => {
+                        console.log('Id Kopii: %s', copiedDataItem.id)
+                        _this.defaultSelectAction(copiedDataItem.id);
+                        if (_this.copyHandler) _this.copyHandler(originalItemId, copiedDataItem.id)
+                    })
+            }
+
         });
     }
 

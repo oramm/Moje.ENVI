@@ -11,6 +11,7 @@ class InvoiceItemsCollection extends SimpleCollection {
             hasFilter: true,
             isEditable: true,
             isAddable: true,
+            isCopyable: true,
             isDeletable: true,
             isSelectable: true,
 

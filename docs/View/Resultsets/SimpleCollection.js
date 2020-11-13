@@ -60,8 +60,7 @@ class SimpleCollection extends Collection {
 
 
     selectTrigger(itemId) {
-        var item = Tools.search(parseInt(itemId), 'id', this.connectedRepository.items);
-        this.connectedRepository.currentItem = item;
+        this.connectedRepository.setCurrentItemById(itemId);
     }
 
     /*

@@ -12,7 +12,8 @@ class SimpleRepository extends Repository {
         getItemsListServerFunctionName,
         addNewServerFunctionName,
         editServerFunctionName,
-        deleteServerFunctionName) {
+        deleteServerFunctionName,
+        copyServerFunctionName = addNewServerFunctionName) {
         super(initParameter);
         this.parentItemId = initParameter.parentItemId;
         if (typeof initParameter === 'string') {
@@ -22,6 +23,7 @@ class SimpleRepository extends Repository {
             this.addNewServerFunctionName = addNewServerFunctionName;
             this.editServerFunctionName = editServerFunctionName;
             this.deleteServerFunctionName = deleteServerFunctionName;
+            this.copyServerFunctionName = copyServerFunctionName;
             sessionStorage.setItem(this.name, JSON.stringify(this));
         }
         //mamy obiekt z SessionStorage
@@ -54,7 +56,7 @@ class SimpleRepository extends Repository {
 
     //Krok 2 - wywoływana przy SUBMIT
     addNewItem(dataItem, viewObject) {
-        return this.doAddNewFunctionOnItem(dataItem, this.addNewServerFunctionName, viewObject);
+        return super.addNewItem(dataItem, this.addNewServerFunctionName, viewObject);
     }
 
     //Krok 2 - wywoływana przy SUBMIT
@@ -69,14 +71,24 @@ class SimpleRepository extends Repository {
         return new Promise((resolve, reject) => {
             super.deleteItem(item, this.deleteServerFunctionName, viewObject)
                 .then((res) => {
-                    console.log('usunięto: ', res)
                     resolve(this.name + ': item deleted');
                 });
         });
     }
 
     copyCurrentItem(viewObject) {
-        return this.addNewItem(this.currentItem, viewObject);
+        return new Promise((resolve) => {
+            var tmpDataObject = Tools.cloneOfObject(this.currentItem);
+            tmpDataObject.id = undefined;
+            resolve(this.addNewItem(tmpDataObject, viewObject));
+        });
+    }
+
+    copyItem(item, viewObject) {
+        var tmpDataObject = Tools.cloneOfObject(item);
+        tmpDataObject.id = undefined;
+        return super.addNewItem(tmpDataObject, this.copyServerFunctionName, viewObject);
+
     }
 
     /*

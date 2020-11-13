@@ -18,11 +18,11 @@ class PersonsController {
             'editEntityInDb',
             'deleteEntity');
 
-        var promises = [];
-
-        promises[0] = personsRepository.initialise();
-        promises[1] = entitiesRepository.initialise();
-
+        var promises = [
+            personsRepository.initialise(),
+            entitiesRepository.initialise()
+        ]
+        
         Promise.all(promises)
             .then((res) => {
                 console.log(res);

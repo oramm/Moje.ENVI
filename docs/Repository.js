@@ -64,11 +64,12 @@ class Repository {
 
     //używać tylko gdy Repository ma wiele bieżących elementów (multiselect)
     addToCurrentItems(newDataItem) {
-        if (this.currentItemsLocalData && this.currentItemsLocalData[0])
-            var wasItemAlreadySelected = this.currentItemsLocalData.filter(existingDataItem => existingDataItem.id == newDataItem.id)[0];
-        if (!wasItemAlreadySelected)
-            this.currentItemsLocalData.push(newDataItem);
-
+        if (newDataItem) {
+            if (this.currentItemsLocalData && this.currentItemsLocalData[0])
+                var wasItemAlreadySelected = this.currentItemsLocalData.filter(existingDataItem => existingDataItem.id == newDataItem.id)[0];
+            if (!wasItemAlreadySelected)
+                this.currentItemsLocalData.push(newDataItem);
+        }
         //sessionStorage.setItem(this.name, JSON.stringify(this));
     }
 
@@ -96,7 +97,7 @@ class Repository {
         return new Promise((resolve, reject) => {
             var newIndex = this.items.findIndex(item => item.id == dataItem.id);
             this.items[newIndex] = dataItem;
-            console.log('%s:: wykonano funkcję: %s, %o', this.name, 'clientSideEditItemHandler', dataItem);
+            console.log('%s:: wykonano funkcję: %s, %o', this.name, this, dataItem);
             resolve(dataItem);
         });
     }
@@ -105,11 +106,12 @@ class Repository {
      * używany do ustawienia repozytorium po stronie klienta (bez obsługi viewObject)
      * gdy edytujemy element nieposiadający listy
      */
-    clientSideAddNewItemHandler(dataItem) {
+    clientSideAddNewItemHandler(dataItem, serverFunctionName) {
         return new Promise((resolve, reject) => {
             this.items.push(dataItem);
+            console.log('dodaję obiekt docelowy, jego parent: ,%o', dataItem._parent)
             this.currentItem = dataItem;
-            console.log('%s:: wykonano funkcję: %s, %o', this.name, 'clientSideAddNewItemHandler', dataItem);
+            console.log('%s:: wykonano funkcję: %s, %o', this.name, serverFunctionName, dataItem);
             resolve(dataItem);
         });
     }
@@ -123,7 +125,7 @@ class Repository {
             var index = this.items.findIndex(item => item.id == dataItem.id);
             this.items.splice(index, 1);
             this.currentItem = {};
-            console.log('%s:: wykonano funkcję: %s, %o', this.name, 'clientSideDeleteItemHandler', dataItem);
+            console.log('%s:: wykonano funkcję: %s, %o', this.name, this.deleteServerFunctionName, dataItem);
             resolve(dataItem);
         });
     }
@@ -214,6 +216,7 @@ class Repository {
             newItem._tmpId = newItemTmpId;
             //wstaw roboczy obiekt do repozytorium, żeby obsłużyć widok
             this.items.push(newItem);
+            console.log('tworzę obiekt tymczasowy, jego parent: %o', newItem._parent)
             this.currentItem = Tools.cloneOfObject(newItem);
             viewObject.addNewHandler.apply(viewObject, ["PENDING", newItem]);
 
@@ -238,13 +241,14 @@ class Repository {
                     this.handleAddNewItem(resp.result)
                         .then((result) => {
                             var newItemFromServer = result;
-                            //(typeof result==='object')? newItem = result : newItem.id = result;
-
                             //usuń z repozytorium tymczasowy obiekt
-                            var index = this.items.findIndex(item => item._tmpid == newItemTmpId);
+                            var index = this.items.findIndex(item => item._tmpId == newItemTmpId);
+                            console.log('usuwam obiekt tymczasowy, jego _parent: %o', this.items[index]._parent);
                             this.items.splice(index, 1);
+            
                             //wstaw do repozytorium nowy obiekt z serwera
-                            this.clientSideAddNewItemHandler(newItemFromServer)
+                            this.clientSideAddNewItemHandler(newItemFromServer, serverFunctionName);
+                            
                             //atrybut '_tmpId' jest potrzebny do obsłużenia viewObject
                             newItemFromServer._tmpId = newItemTmpId;
                             viewObject.addNewHandler.apply(viewObject, ["DONE", newItemFromServer]);
@@ -258,7 +262,7 @@ class Repository {
                             this.items.splice(index, 1);
                             this.currentItem = {};
                             viewObject.addNewHandler.apply(viewObject, ["ERROR", newItem, err]);
-                            //reject(err);
+                            reject(err);
                         });
                 })
                 .catch(err => {
@@ -388,7 +392,6 @@ class Repository {
                 .then(resp => {
                     this.handleDeleteItem(resp.result)
                         .then((result) => {
-                            //viewHandler.apply(viewObject, ["DONE", item.id]);
                             viewObject.removeHandler.apply(viewObject, ["DONE", oldItem.id, undefined, result]);
                             resolve(oldItem);
                         })
@@ -404,7 +407,6 @@ class Repository {
                     throw err;
                 });
         });
-
     }
 
     handleDeleteItem(resp) {

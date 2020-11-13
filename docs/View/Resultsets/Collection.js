@@ -82,7 +82,7 @@ class Collection extends Resultset {
     showRow(id) {
         this.$dom.find('.collection-item#' + id).show();
     }
-    
+
     hideRow(id) {
         this.$dom.find('.collection-item#' + id).hide();
     }
@@ -247,6 +247,17 @@ class Collection extends Resultset {
         });
     }
 
+    setCopyAction() {
+        this.$dom.find(".itemCopy").off('click');
+        var _this = this;
+        this.$collapsible.find(".itemCopy").click(function () {
+            var originalItemId = connectedRepository.copyCurrentItem.id;
+            _this.connectedRepository.copyCurrentItem(_this)
+                .then((copiedDataItem) => { if (_this.copyHandler) _this.copyHandler(originalItemId) })
+
+        });
+    }
+
     setAddNewAction() {
         this.$dom.find(".addNewItemIcon").click(
             () => this.addNewModal.triggerAction(this)
@@ -359,9 +370,11 @@ class Collection extends Resultset {
                 .append('<ul>');
             if (this.editModal)
                 button.children('ul')
-                    //data-target="' + this.id + '" class="btn modal-trigger"
                     .append('<li><a data-target="' + this.editModal.id + '" class="btn-floating blue collectionItemEdit modal-trigger"><i class="material-icons">edit</i></a></li>');
-            //.append('<li><a href ="'+ item.editUrl + '" target="_blank" class="btn-floating blue collectionItemEdit"><i class="material-icons">edit</i></a></li>');
+            if (this.isCopyable)
+                button.children('ul')
+                    .append('<li><span class="itemCopy"><i class="material-icons">content_copy</i></span></li>');
+
             if (this.isDeletable)
                 button.children('ul')
                     .append('<li><a class="btn-floating red itemDelete"><i class="material-icons">delete</i></a></li>');

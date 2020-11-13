@@ -12,9 +12,7 @@ class SimpleCollapsible extends Collapsible {
         if (this.connectedRepository.items) {
             var i = 0;
             for (const item of this.connectedRepository.items) {
-                itemsList.push(this.makeItem(item,
-                    this.$bodyDoms[i++])
-                );
+                itemsList.push(this.makeItem(item, this.$bodyDoms[i++]));
             }
         }
         return itemsList;
@@ -22,7 +20,7 @@ class SimpleCollapsible extends Collapsible {
 
     makeBodyDoms() {
         for (var i = 0; i < this.connectedRepository.items.length; i++) {
-            this.$bodyDoms[i] = this.makeBodyDom(this.connectedRepository.items[i]);
+            this.$bodyDoms[i] = this.makeBody(this.connectedRepository.items[i]).$dom;
         }
     }
 
@@ -35,7 +33,6 @@ class SimpleCollapsible extends Collapsible {
      */
     removeTrigger(itemId) {
         var item = Tools.search(parseInt(itemId), "id", this.connectedRepository.items);
-
         this.connectedRepository.deleteItem(item, this)
             .catch(err => {
                 console.error(err);
