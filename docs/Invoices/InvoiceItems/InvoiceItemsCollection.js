@@ -34,7 +34,6 @@ class InvoiceItemsCollection extends SimpleCollection {
      * @param {dataItem} this.connectedRepository.items[i])
      */
     makeTitle(dataItem) {
-        //return 'test'
         var netValueLabel = this.parentViewObject.currencyFormatter.format(dataItem._netValue);
         var grossValueLabel = this.parentViewObject.currencyFormatter.format(dataItem._grossValue);
         return dataItem.description + '<br>Netto: <em>' + netValueLabel + '</em><br>' +
