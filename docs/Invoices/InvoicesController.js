@@ -18,7 +18,7 @@ class InvoicesController {
             'deleteEntity');
 
         InvoicesSetup.contractsRepository = new SimpleRepository('Contracts repository',
-            'getContractsListPerProject',
+            'getContractsList',
             'addNewContract',
             'editContract',
             'deleteContract'
