@@ -38,9 +38,9 @@ class InvoicesController {
             'deleteInvoiceItem');
 
         var promises = [
-            InvoicesSetup.personsRepository.initialise(),
-            InvoicesSetup.entitiesRepository.initialise(),
-            InvoicesSetup.contractsRepository.initialise({ onlyOur: true, onlyKeyData: true }),
+            InvoicesSetup.personsRepository.initialiseNodeJS('persons'),
+            InvoicesSetup.entitiesRepository.initialiseNodeJS('entities'),
+            InvoicesSetup.contractsRepository.initialiseNodeJS('contracts/?onlyOur=true&onlyKeyData=true'),
         ];
 
         Promise.all(promises)

@@ -13,7 +13,7 @@ class EntitiesController {
             'deleteEntity');
 
         var promises = [
-            entitiesRepository.initialise()
+            entitiesRepository.initialiseNodeJS('entities')
         ];
 
         Promise.all(promises)

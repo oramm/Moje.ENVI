@@ -60,21 +60,21 @@ class FilterRawPanel extends Resultset {
             .then(() => {
                 if (this.form.validate(criteriaParameters)) {
                     var promises = [
-                        InvoicesSetup.invoicesRepository.initialise(criteriaParameters),
-                        InvoicesSetup.invoiceitemsRepository.initialise(criteriaParameters)
-                    ]
+                        InvoicesSetup.invoicesRepository.initialiseNodeJS('invoices/?startDate=' + criteriaParameters.startDate + '&endDate=' + criteriaParameters.endDate),
+                        InvoicesSetup.invoiceitemsRepository.initialiseNodeJS('invoiceItems/?startDate=' + criteriaParameters.startDate + '&endDate=' + criteriaParameters.endDate)
+                    ];
                     Promise.all(promises)
                         .then((res) => {
                             var oldResultset = _this.resultset;
                             _this.resultset = this.createResultset();
                             oldResultset.$dom.replaceWith(_this.resultset.$dom);
-                            return('collapsible made')
+                            return ('collapsible made')
                         })
                         .then((res) => {
                             $('select').material_select();
                             $('.modal').modal();
                             $('.datepicker').pickadate(MainSetup.datePickerSettings);
-                            
+
                             Materialize.updateTextFields();
                             $('ul.tabs').tabs();
                             iFrameResize({ log: false, heightCalculationMethod: 'taggedElement', checkOrigin: false });

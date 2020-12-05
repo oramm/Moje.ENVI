@@ -5,6 +5,7 @@ class PersonsController {
         $("#authorize-div").hide();
         personsView.dataLoaded(false);
         //signoutButton.style.display = 'block';
+        
 
         personsRepository = new SimpleRepository('Persons repository',
             'getPersonsList',
@@ -19,10 +20,10 @@ class PersonsController {
             'deleteEntity');
 
         var promises = [
-            personsRepository.initialise(),
-            entitiesRepository.initialise()
+            personsRepository.initialiseNodeJS('persons'),
+            entitiesRepository.initialiseNodeJS('entities')
         ]
-        
+
         Promise.all(promises)
             .then((res) => {
                 console.log(res);

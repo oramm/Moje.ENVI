@@ -46,6 +46,26 @@ class SimpleRepository extends Repository {
                 });
         });
     }
+
+    initialiseNodeJS(requestParams) {
+        return new Promise((resolve, reject) => {
+            $.ajax({
+                type: 'GET',
+                url: 'https://erp-envi.herokuapp.com/' + requestParams, //http://localhost:3000/
+                success: (response) => {
+                    this.items = response;
+                    sessionStorage.setItem(this.name, JSON.stringify(this));
+                    console.log(this.name + ' NodeJS: %o', response);
+                    resolve(this.name + " initialised");
+                },
+                error: (xhr, status, err) => {
+                    console.log(xhr.responseText);
+                }
+            });
+
+        });
+
+    }
     //najczęściej jest to projectId
     parentItemIdFromURL() {
         return new Promise((resolve, reject) => {
