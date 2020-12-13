@@ -51,7 +51,8 @@ class SimpleRepository extends Repository {
         return new Promise((resolve, reject) => {
             $.ajax({
                 type: 'GET',
-                url: 'https://erp-envi.herokuapp.com/' + requestParams, //http://localhost:3000/
+                url: 'http://localhost:3000/' + requestParams,
+                //url: 'https://erp-envi.herokuapp.com/' + requestParams,
                 success: (response) => {
                     this.items = response;
                     sessionStorage.setItem(this.name, JSON.stringify(this));
