@@ -53,7 +53,8 @@
 
 <script async defer src="https://apis.google.com/js/api.js"
     onload="this.onload=function(){}; 
-            gAuth = parent.gAuth;
+            //gAuth = parent.gAuth;
+            gAuth = new GAuth2();
             gAuth.handleClientLoad(new EntitiesController())"
     onreadystatechange="if (this.readyState === 'complete') this.onload()">
         $(document).ready(function(){
