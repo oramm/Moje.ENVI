@@ -59,7 +59,7 @@ class Modal {
      * Funkcja używana w connectedResultsetComponent.setEditAction() oraz connectedResultsetComponent.addNewAction()
      */
     triggerAction(connectedResultsetComponent) {
-        ReachTextArea.reachTextAreaInit();
+        //ReachTextArea.reachTextAreaInit();
         if (Object.getPrototypeOf(connectedResultsetComponent).constructor.name !== 'RawPanel')
             $(connectedResultsetComponent.$dom.css('min-height', '300px'));
         this.connectWithResultsetComponent(connectedResultsetComponent);
@@ -88,8 +88,8 @@ class Modal {
     preppendTriggerButtonTo($uiElelment, caption, connectedResultsetComponent, buttonStyle) {
         var $button = $('<button data-target="' + this.id + '">' + caption + '</button>');
         $button
-        .addClass((buttonStyle === 'FLAT') ? 'btn-flat' : 'btn')  
-        .addClass('modal-trigger');
+            .addClass((buttonStyle === 'FLAT') ? 'btn-flat' : 'btn')
+            .addClass('modal-trigger');
         var _this = this;
         $button.click(function () {
             _this.triggerAction(connectedResultsetComponent)
@@ -167,4 +167,4 @@ class Modal {
         else
             this.connectedResultsetComponent.connectedRepository.addNewItem(dataObject, this.connectedResultsetComponent);
     }
-} 
+}
