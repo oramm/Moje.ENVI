@@ -2,7 +2,8 @@ class InvoiceSetAsSentModal extends Modal {
     constructor(id, title, connectedResultsetComponent) {
         super(id, title, connectedResultsetComponent, 'EDIT');
         //this.controller = new AppendInvoiceAttachmentsModalController(this);
-        this.doChangeFunctionOnItemName = 'setAsSentInvoice';
+        //this.doChangeFunctionOnItemName = 'setAsSentInvoice';
+        this.doChangeOnItemRoute = 'setAsSentInvoice';
 
         this.initFormElements();
 

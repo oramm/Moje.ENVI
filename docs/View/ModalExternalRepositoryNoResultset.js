@@ -32,17 +32,21 @@ class ModalExternalRepositoryNoResultset extends Modal {
     }
 
     editSubmitTrigger(dataObject) {
-        if (this.doChangeFunctionOnItemName)
-            this.repository.doChangeFunctionOnItem(dataObject, this.doChangeFunctionOnItemName, this.connectedResultsetComponent)
-        else
+        if (!this.doChangeFunctionOnItemName && !this.doChangeOnItemRoute)
             this.repository.editItem(dataObject, this.connectedResultsetComponent);
+        else {
+            let argument = (this.doChangeFunctionOnItemName) ? this.doChangeFunctionOnItemName : this.doChangeOnItemRoute;
+            this.repository.doChangeFunctionOnItem(dataObject, argument, this.connectedResultsetComponent)
+        }
     }
 
     addNewSubmitTrigger(dataObject) {
-        if (this.doAddNewFunctionOnItemName)
-            this.repository.doAddNewFunctionOnItem(dataObject, this.doAddNewFunctionOnItemName, this.connectedResultsetComponent)
-        else
+        if (!this.doAddNewFunctionOnItemName && !this.doAddNewItemRoute)
             this.repository.addNewItem(dataObject, this.connectedResultsetComponent);
+        else {
+            let argument = (this.doAddNewFunctionOnItemName) ? this.doAddNewFunctionOnItemName : this.doAddNewItemRoute;
+            this.repository.doAddNewFunctionOnItem(dataObject, argument, this.connectedResultsetComponent)
+        }
     }
     /*
      * używana w this.triggerAction() - po właczeniu modala do edycji

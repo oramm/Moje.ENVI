@@ -6,11 +6,11 @@ class EntitiesController {
         view.dataLoaded(false);
         //signoutButton.style.display = 'block';
 
-        entitiesRepository = new SimpleRepository('Entities repository',
-            'getEntitiesList',
-            'addNewEntityInDb',
-            'editEntityInDb',
-            'deleteEntity');
+        entitiesRepository = new SimpleRepository(
+            {
+                name: 'Entities repository',
+                actionsNodeJSSetup: { addNewRoute: 'entity', editRoute: 'entity', deleteRoute: 'entity' }
+            });
 
         var promises = [
             entitiesRepository.initialiseNodeJS('entities')

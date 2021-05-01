@@ -61,7 +61,7 @@ class GAuth2 {
     var _this = this;
     if (isSignedIn) {
       var mainController = new MainController();
-      
+
       _this.onSignIn(gapi.auth2.getAuthInstance().currentUser.get().getBasicProfile())
       mainController.main();
       //personRolesController = new PersonRolesController();
@@ -81,15 +81,15 @@ class GAuth2 {
    * @param {type} googleUser - gapi.auth2.getAuthInstance().currentUser.get().getBasicProfile()
    */
   onSignIn(googleUser) {
-    var profile = googleUser;
-    console.log('ID: ' + profile.getId()); // Do not send to your backend! Use an ID token instead.
-    console.log('Name: ' + profile.getName());
-    console.log('Image URL: ' + profile.getImageUrl());
-    console.log('Email: ' + profile.getEmail()); // This is null if the 'email' scope is not present.
+    console.log('ID: ' + googleUser.getId()); // Do not send to your backend! Use an ID token instead.
+    console.log('Name: ' + googleUser.getName());
+    console.log('Image URL: ' + googleUser.getImageUrl());
+    console.log('Email: ' + googleUser.getEmail()); // This is null if the 'email' scope is not present.
 
-    this.userName = profile.getName();
-    this.userEmail = profile.getEmail();
-    this.userGoogleImage = profile.getImageUrl();
+    this.userName = googleUser.getName();
+    this.userEmail = googleUser.getEmail();
+    this.userGoogleImage = googleUser.getImageUrl();
+
   }
 
   /**

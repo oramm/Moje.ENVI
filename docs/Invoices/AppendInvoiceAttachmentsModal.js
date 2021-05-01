@@ -2,7 +2,8 @@ class AppendInvoiceAttachmentsModal extends Modal {
     constructor(id, title, connectedResultsetComponent) {
         super(id, title, connectedResultsetComponent, 'EDIT');
         //this.controller = new AppendInvoiceAttachmentsModalController(this);
-        this.doChangeFunctionOnItemName = 'issueInvoice';
+        //this.doChangeFunctionOnItemName = 'issueInvoice';
+        this.doChangeOnItemRoute = 'issueInvoice';
 
         this.initFormElements();
 

@@ -5,19 +5,17 @@ class PersonsController {
         $("#authorize-div").hide();
         personsView.dataLoaded(false);
         //signoutButton.style.display = 'block';
-        
 
-        personsRepository = new SimpleRepository('Persons repository',
-            'getPersonsList',
-            'addNewPersonInDb',
-            'editPersonInDb',
-            'deletePerson');
 
-        entitiesRepository = new SimpleRepository('Entities repository',
-            'getEntitiesList',
-            'addNewEntityInDb',
-            'editEntityInDb',
-            'deleteEntity');
+        personsRepository = new SimpleRepository({
+            name: 'Persons repository',
+            actionsNodeJSSetup: { addNewRoute: 'person', editRoute: 'person', deleteRoute: 'person' }
+        });
+
+        entitiesRepository = new SimpleRepository({
+            name: 'Entities repository',
+            actionsNodeJSSetup: { addNewRoute: 'entity', editRoute: 'entity', deleteRoute: 'entity' }
+        });
 
         var promises = [
             personsRepository.initialiseNodeJS('persons'),
@@ -38,4 +36,3 @@ class PersonsController {
 
     }
 }
-

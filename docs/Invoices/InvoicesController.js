@@ -5,37 +5,27 @@ class InvoicesController {
         $("#authorize-div").hide();
         view.dataLoaded(false);
         //signoutButton.style.display = 'block';
-        InvoicesSetup.personsRepository = new SimpleRepository('Persons repository',
-            'getPersonsNameSurnameEmailListEnvi',
-            'addNewPersonInDb',
-            'editPersonInDb',
-            'deletePerson');
+        InvoicesSetup.personsRepository = new SimpleRepository({
+            name: 'Persons repository',
+            actionsNodeJSSetup: { addNewRoute: 'person', editRoute: 'person', deleteRoute: 'person' }
+        });
 
-        InvoicesSetup.entitiesRepository = new SimpleRepository('Entities repository',
-            'getEntitiesList',
-            'addNewEntityInDb',
-            'editEntityInDb',
-            'deleteEntity');
+        InvoicesSetup.entitiesRepository = new SimpleRepository({
+            name: 'Entities repository',
+            actionsNodeJSSetup: { addNewRoute: 'entity', editRoute: 'entity', deleteRoute: 'entity' }
+        });
 
-        InvoicesSetup.contractsRepository = new SimpleRepository('Contracts repository',
-            'getContractsList',
-            'addNewContract',
-            'editContract',
-            'deleteContract'
-        );
+        InvoicesSetup.contractsRepository = new SimpleRepository('Contracts repository');
 
-        InvoicesSetup.invoicesRepository = new SimpleRepository('Invoices repository',
-            'getInvoicesList',
-            'addNewInvoice',
-            'editInvoice',
-            'deleteInvoice',
-            'copyInvoice');
+        InvoicesSetup.invoicesRepository = new SimpleRepository({
+            name: 'Invoices repository',
+            actionsNodeJSSetup: { addNewRoute: 'invoice', editRoute: 'invoice', deleteRoute: 'invoice', copyRoute: 'copyInvoice' }
+        });
 
-        InvoicesSetup.invoiceitemsRepository = new SimpleRepository('InvoiceItems repository',
-            'getInvoiceItemsList',
-            'addNewInvoiceItem',
-            'editInvoiceItem',
-            'deleteInvoiceItem');
+        InvoicesSetup.invoiceitemsRepository = new SimpleRepository({
+            name: 'InvoiceItems repository',
+            actionsNodeJSSetup: { addNewRoute: 'invoiceItem', editRoute: 'invoiceItem', deleteRoute: 'invoiceItem', copyRoute: 'copyInvoiceItem' }
+        });
 
         var promises = [
             InvoicesSetup.personsRepository.initialiseNodeJS('persons'),
@@ -63,4 +53,3 @@ class InvoicesController {
 
     }
 }
-

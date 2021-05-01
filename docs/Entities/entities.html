@@ -1,13 +1,13 @@
 <!DOCTYPE html>
 <!--MainWindow-->
-<html >
+<html>
+
 <head>
     <meta charset="UTF-8">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.2/css/materialize.min.css">
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-    <link href="../View/test.css" rel="stylesheet" type="text/css"/>
-    
-    
+    <link href="../View/test.css" rel="stylesheet" type="text/css" />
+
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
     <script src="../Tools.js" type="text/javascript"></script>
     <script src="../View/FormTools.js" type="text/javascript"></script>
@@ -26,39 +26,40 @@
     <script src="../SimpleRepository.js" type="text/javascript"></script>
     <script src="EntitiesController.js" type="text/javascript"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.2/js/materialize.min.js"></script>
-    
+
     <script src="../GAuth2.js" type="text/javascript"></script>
     <script src="https://apis.google.com/js/api.js"></script>
 </head>
+
 <body>
-<div id="page" class="container">
-    <div id="authorize-div" style="display: none"> <span>Authorize access to Google Apps Script Execution API</span> 
-      <!--Button for the user to click to initiate auth sequence -->
-      <button id="authorize-button" onclick="handleAuthClick(event)"> Authorize </button>  
+    <div id="page" class="container">
+        <div id="authorize-div" style="display: none"> <span>Authorize access to Google Apps Script Execution API</span>
+            <!--Button for the user to click to initiate auth sequence -->
+            <button id="authorize-button" onclick="handleAuthClick(event)"> Authorize </button>
+        </div>
+
+        <div id="loading" style="display:none"></div>
+
+        <div id="content" style="display: none">
+            <div id="tittle"></div>
+            <div id="actionsMenu"></div>
+
+            <div id="resultSet" class="section">
+
+            </div>
+        </div>
     </div>
 
-    <div id="loading" style="display:none"></div>
-    
-    <div id="content" style="display: none">
-        <div id = "tittle"></div>
-        <div id = "actionsMenu"></div>
-
-        <div id="resultSet" class="section">
-            
-        </div>  
-    </div>
-</div>
- 
 </body>
 
-<script async defer src="https://apis.google.com/js/api.js"
-    onload="this.onload=function(){}; 
+<script async defer src="https://apis.google.com/js/api.js" onload="this.onload=function(){}; 
             //gAuth = parent.gAuth;
             gAuth = new GAuth2();
             gAuth.handleClientLoad(new EntitiesController())"
     onreadystatechange="if (this.readyState === 'complete') this.onload()">
-        $(document).ready(function(){
-    $('.collapsible').collapsible();
-  });
-</script>  
+        $(document).ready(function () {
+            $('.collapsible').collapsible();
+        });
+    </script>
+
 </html>

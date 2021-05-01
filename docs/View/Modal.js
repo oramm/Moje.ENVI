@@ -155,16 +155,20 @@ class Modal {
     }
 
     editSubmitTrigger(dataObject) {
-        if (this.doChangeFunctionOnItemName)
-            this.connectedResultsetComponent.connectedRepository.doChangeFunctionOnItem(dataObject, this.doChangeFunctionOnItemName, this.connectedResultsetComponent)
-        else
+        if (!this.doChangeFunctionOnItemName && !this.doChangeOnItemRoute)
             this.connectedResultsetComponent.connectedRepository.editItem(dataObject, this.connectedResultsetComponent);
+        else {
+            let argument = (this.doChangeFunctionOnItemName) ? this.doChangeFunctionOnItemName : this.doChangeOnItemRoute;
+            this.connectedResultsetComponent.connectedRepository.doChangeFunctionOnItem(dataObject, argument, this.connectedResultsetComponent);
+        }
     }
 
     addNewSubmitTrigger(dataObject) {
-        if (this.doAddNewFunctionOnItemName)
-            this.connectedResultsetComponent.connectedRepository.doAddNewFunctionOnItem(dataObject, this.doAddNewFunctionOnItemName, this.connectedResultsetComponent)
-        else
+        if (!this.doAddNewFunctionOnItemName && !this.doAddNewItemRoute)
             this.connectedResultsetComponent.connectedRepository.addNewItem(dataObject, this.connectedResultsetComponent);
+        else {
+            let argument = (this.doAddNewFunctionOnItemName) ? this.doAddNewFunctionOnItemName : this.doAddNewItemRoute;
+            this.connectedResultsetComponent.connectedRepository.doAddNewFunctionOnItem(dataObject, argument, this.connectedResultsetComponent);
+        }
     }
 }
