@@ -9,7 +9,7 @@ class ModalExternalRepository extends Modal {
      *                                  >> repository. addNewHandler >> personsRolesCollection.addNewHandler[PENDING]
      *                                  >> repository. addNewHandler >> personsRolesCollection.addNewHandler[DONE]
     */
-    submitTrigger() {
+    async submitTrigger() {
         try {
             tinyMCE.triggerSave();
         } catch (e) { console.log('Modal.submitTrigger():: TinyMCE not defined') }
@@ -20,38 +20,34 @@ class ModalExternalRepository extends Modal {
         var extRepoDataObject;
         if (this.externalRepository.currentItem) extRepoDataObject = Tools.cloneOfObject(this.externalRepository.currentItem);
 
-        this.form.submitHandler(extRepoDataObject)
-            .then(() => {
-                //do serwera wysyłam edytowany obiekt z zewnerznego repozytorium - trzeba tam używać tej zmiennej
-                tmpDataObject._extRepoTmpDataObject = extRepoDataObject;
-                if (this.form.validate(extRepoDataObject)) {
-                    if (this.mode === 'EDIT')
-                        this.editSubmitTrigger(tmpDataObject);
-                    else
-                        this.addNewSubmitTrigger(tmpDataObject)
-                    this.connectedResultsetComponent.connectedRepository.currentItem = tmpDataObject;
-                } else
-                    alert('Formularz źle wypełniony')
-                this.$dom.modal('close');
-            })
+        await this.form.submitHandler(extRepoDataObject)
+        //do serwera wysyłam edytowany obiekt z zewnerznego repozytorium - trzeba tam używać tej zmiennej
+        tmpDataObject._extRepoTmpDataObject = extRepoDataObject;
+        if (this.form.validate(extRepoDataObject)) {
+            if (this.mode === 'EDIT')
+                this.editSubmitTrigger(tmpDataObject);
+            else
+                this.addNewSubmitTrigger(tmpDataObject)
+            this.connectedResultsetComponent.connectedRepository.currentItem = tmpDataObject;
+        } else
+            alert('Formularz źle wypełniony')
+        this.$dom.modal('close');
     }
 
-    editSubmitTrigger(dataObject) {
-        this.connectedResultsetComponent.connectedRepository.doChangeFunctionOnItem(dataObject, this.doChangeFunctionOnItemName, this.connectedResultsetComponent)
-            .then((editedItem) => {
-                if (this.externalRepository.currentItem && editedItem._extRepoTmpDataObject) {
-                    this.externalRepository.clientSideEditItemHandler(dataObject._extRepoTmpDataObject);
-                }
-            });
+    async editSubmitTrigger(dataObject) {
+        let argument = (this.doChangeFunctionOnItemName) ? this.doChangeFunctionOnItemName : this.doChangeOnItemRoute;
+        let editedItem = await this.connectedResultsetComponent.connectedRepository.doChangeFunctionOnItem(dataObject, argument, this.connectedResultsetComponent)
+        if (this.externalRepository.currentItem && editedItem._extRepoTmpDataObject) {
+            this.externalRepository.clientSideEditItemHandler(dataObject._extRepoTmpDataObject);
+        }
     }
 
-    addNewSubmitTrigger(dataObject) {
-        this.connectedResultsetComponent.connectedRepository.doChangeFunctionOnItem(dataObject, this.doAddNewFunctionOnItemName, this.connectedResultsetComponent)
-            .then((editedItem) => {
-                if (this.externalRepository.currentItem && dataObject._extRepoTmpDataObject) {
-                    this.externalRepository.clientSideAddNewItemHandler(editedItem._extRepoTmpDataObject);
-                }
-            });
+    async addNewSubmitTrigger(dataObject) {
+        let argument = (this.doAddNewFunctionOnItemName) ? this.doAddNewFunctionOnItemName : this.doAddNewItemRoute;
+        let editedItem = await this.connectedResultsetComponent.connectedRepository.doChangeFunctionOnItem(dataObject, argument, this.connectedResultsetComponent)
+        if (this.externalRepository.currentItem && dataObject._extRepoTmpDataObject) {
+            this.externalRepository.clientSideAddNewItemHandler(editedItem._extRepoTmpDataObject);
+        }
     }
     /*
      * używana w this.triggerAction() - po właczeniu modala do edycji

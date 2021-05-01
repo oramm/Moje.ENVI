@@ -423,6 +423,7 @@ class FileInput {
                 .then(() => resolve(blobs));
         });
     }
+
     validate() {
         var test = true;
         if (this.isRequired && !this.getFiles()[0])
@@ -636,7 +637,8 @@ class DatePicker {
 
         // Use the picker object directly.
         var picker = $generatedInput.pickadate('picker')
-        picker.set('select', date, { format: 'yyyy-mm-dd' })
+        //picker.set('select', date, { format: 'yyyy-mm-dd' })
+        picker.set('select', date)
     }
     getValue() {
         return this.$input.val();
@@ -964,10 +966,9 @@ class AtomicEditForm extends Form {
      * Klasa pochodna musi mieć metodę submitTrigger()
      * @param {function} submitTrigger
      */
-    setSubmitAction(submitTrigger) {
+    setSubmitAction() {
         this.$dom.submit((event) => {
             this.submitTrigger();
-            //(typeof submitTrigger  === 'function')? submitTrigger() : this.submitTrigger();
             // prevent default posting of form
             event.preventDefault();
         });
