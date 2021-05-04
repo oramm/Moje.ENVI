@@ -1130,8 +1130,9 @@ class SwitchInput {
  * @type type
  */
 class FilterSwitchInput extends SwitchInput {
-    constructor(onLabel, offLabel, connectedFilterObject) {
-        super(onLabel, offLabel);
+    constructor(filterElement, connectedFilterObject) {
+        super(filterElement.onLabel, filterElement.offLabel);
+        this.filterElement = filterElement;
         this.connectedFilterObject = connectedFilterObject;
         this.$dom.find('input').attr('checked', (this.connectedFilterObject.showActiveRows) ? 'true' : 'false');
         this.value = (this.connectedFilterObject.showActiveRows) ? true : false;
@@ -1141,7 +1142,7 @@ class FilterSwitchInput extends SwitchInput {
         var _this = this;
         this.$dom.find("input[type=checkbox]").on("change", function () {
             _this.value = $(this).prop('checked');
-            _this.connectedFilterObject.changeFilterCriteriaHandler();
+            _this.connectedFilterObject.changeFilterCriteriaHandler(_this.filterElement);
         });
     }
 }

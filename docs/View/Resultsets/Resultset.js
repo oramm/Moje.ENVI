@@ -1,4 +1,4 @@
-class Resultset{
+class Resultset {
     constructor(initParamObject) {
         this.id = initParamObject.id;
         this.parentDataItem = initParamObject.parentDataItem;
@@ -14,11 +14,13 @@ class Resultset{
         this.hasArchiveSwitch = false;//initParamObject.hasArchiveSwitch;
         this.editModal = initParamObject.editModal;
         this.addNewModal = initParamObject.addNewModal;
-        
+        this.connectedRepository = initParamObject.connectedRepository;
+        this.connectedRepositoryGetRoute = initParamObject.connectedRepositoryGetRoute;
+
         this.$dom;
         this.$actionsMenu;
     }
-    
+
     makePreloader(id) {
         var $preloader = $('<div class="progress">');
         $preloader
