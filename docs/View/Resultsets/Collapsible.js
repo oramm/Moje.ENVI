@@ -91,12 +91,6 @@ class Collapsible extends Resultset {
         return itemsList;
     }
 
-    makeBodyDoms() {
-        for (let i = 0; i < this.connectedRepository.items.length; i++) {
-            this.$bodyDoms[i] = this.makeBodyDom(this.connectedRepository.items[i]);
-        }
-    }
-
     buildDom() {
         this.$dom.append(this.$actionsMenu);
         this.buildRows();

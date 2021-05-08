@@ -16,4 +16,3 @@ class SearchNavigationBar {
         return $nav;
     }
 }
-

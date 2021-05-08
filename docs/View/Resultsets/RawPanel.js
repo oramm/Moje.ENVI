@@ -1,5 +1,6 @@
 /* 
  * http://materializecss.com/collapsible.html
+ * słuzy jako pojemnik na przyciski wykonujące akcję na serwerze bez rezultsetu
  */
 class RawPanel extends Resultset {
     constructor(initParamObject) {
