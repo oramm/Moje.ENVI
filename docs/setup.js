@@ -30,8 +30,8 @@ class MainSetup {
         sessionStorage.setItem('Current User', JSON.stringify(data));;
     }
 
-    //static serverUrl = 'http://localhost:3000/';
-    static serverUrl = 'https://erp-envi.herokuapp.com/';
+    static serverUrl = 'http://localhost:3000/';
+    //static serverUrl = 'https://erp-envi.herokuapp.com/';
 
     static datePickerSettings = {
         selectMonths: true, // Creates a dropdown to control month
