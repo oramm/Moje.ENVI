@@ -381,6 +381,7 @@ class Repository {
         let result = await fetch(MainSetup.serverUrl + route, {
             method: 'POST',
             headers: this.makeRequestHeaders(),
+            credentials: 'include',
             body: JSON.stringify(item)
         });
         result = await result.text();
@@ -393,6 +394,7 @@ class Repository {
         let result = await fetch(MainSetup.serverUrl + route + '/' + item.id, {
             method: 'PUT',
             headers: this.makeRequestHeaders(),
+            credentials: 'include',
             body: JSON.stringify(item)
         });
         result = await result.text();
@@ -407,6 +409,7 @@ class Repository {
         let result = await fetch(MainSetup.serverUrl + route + '/' + oldItem.id, {
             method: 'DELETE',
             headers: this.makeRequestHeaders(),
+            credentials: 'include',
             body: JSON.stringify(oldItem)
         });
         if (result.authorizeUrl)

@@ -1,10 +1,7 @@
 // Your Client ID can be retrieved from your project in the Google
 // Developer Console, https://console.developers.google.com
-//var CLIENT_ID = '336752284630-tljneqr745b11tuq65ktmlhnbedrph4j.apps.googleusercontent.com';
 var CLIENT_ID = '386403657277-21tus25hgaoe7jdje73plc2qbgakht05.apps.googleusercontent.com'; //ENVI
-//var CLIENT_ID = '369663686128-0q4ccc4crukqi6cg4iinr078k0tf6253.apps.googleusercontent.com'; /// przykłąd
 var SCRIPT_ID = 'M1jCQxOsMBQ_tbMmqjqqAx23ed1cy4zrK'; //ENVI
-//var SCRIPT_ID = 'M4-wFm_LvxywxkhpIO4s4WZxZ-kvETMHy'; /// przykłąd
 
 // Array of API discovery doc URLs for APIs used by the quickstart
 var DISCOVERY_DOCS = ["https://script.googleapis.com/$discovery/rest?version=v1"];
@@ -23,15 +20,18 @@ SCOPES = 'https://www.google.com/calendar/feeds ' +
 
 var gAuth;
 var mainWindowView;
-var user;
 
 class MainSetup {
     static get currentUser() {
         return JSON.parse(sessionStorage.getItem('Current User'));
     }
 
-    //static serverUrl = 'http://localhost:3000/';
-    static serverUrl = 'https://erp-envi.herokuapp.com/';
+    static set currentUser(data) {
+        sessionStorage.setItem('Current User', JSON.stringify(data));;
+    }
+
+    static serverUrl = 'http://localhost:3000/';
+    //static serverUrl = 'https://erp-envi.herokuapp.com/';
 
     static datePickerSettings = {
         selectMonths: true, // Creates a dropdown to control month
