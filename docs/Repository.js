@@ -382,6 +382,7 @@ class Repository {
             method: 'POST',
             headers: this.makeRequestHeaders(),
             credentials: 'include',
+            withCredentials: true,
             body: JSON.stringify(item)
         });
         result = await result.text();
@@ -395,6 +396,7 @@ class Repository {
             method: 'PUT',
             headers: this.makeRequestHeaders(),
             credentials: 'include',
+            withCredentials: true,
             body: JSON.stringify(item)
         });
         result = await result.text();
@@ -410,6 +412,7 @@ class Repository {
             method: 'DELETE',
             headers: this.makeRequestHeaders(),
             credentials: 'include',
+            withCredentials: true,
             body: JSON.stringify(oldItem)
         });
         if (result.authorizeUrl)

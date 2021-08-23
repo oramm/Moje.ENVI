@@ -94,6 +94,7 @@ class GAuth2 {
             method: 'POST',
             headers: myHeaders,
             credentials: 'include',
+            withCredentials: true,
             body: JSON.stringify({ id_token: id_token })
         });
         result = await result.text();
