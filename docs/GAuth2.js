@@ -90,7 +90,7 @@ class GAuth2 {
         let myHeaders = new Headers();
         myHeaders.append("Content-Type", "application/json");
         myHeaders.append('Accept', 'application/json');
-        myHeaders.append('Origin', MainSetup.serverUrl);
+        //myHeaders.append('Origin', MainSetup.serverUrl);
 
 
         let result = await fetch(MainSetup.serverUrl + 'login', {
