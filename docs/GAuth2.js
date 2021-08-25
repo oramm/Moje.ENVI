@@ -96,7 +96,7 @@ class GAuth2 {
         let result = await fetch(MainSetup.serverUrl + 'login', {
             method: 'POST',
             credentials: 'include',
-            mode: 'cors',
+            mode: 'no-cors',
             headers: myHeaders,
 
             withCredentials: true,
