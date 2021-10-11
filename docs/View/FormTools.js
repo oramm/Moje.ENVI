@@ -30,7 +30,7 @@ class AutoCompleteTextField {
     buildDom(id, icon, isRequired) {
         this.$dom = $('<div class="input-field">');
         var $icon = $('<i class="material-icons prefix">' + icon + '</i>');
-        var $input = $('<input name="' + id + '" type="text" class="autocomplete" autocomplete="off">')
+        var $input = $('<input name="' + id + '" type="search" class="autocomplete" autocomplete="off">')
             .attr('id', id);
 
         this.$label = $('<label>');
@@ -914,7 +914,7 @@ class Form {
                 case 'TextArea':
                     //TODO: trzeba przenieść TextArea do odrębnej klasy, żeby to zadziałało
                     //$('#' + this.id + 'employerTextArea').val()
-                    dataObject[this.elements[i].dataItemKeyName] = $('#' + this.elements[i].input.id).val();
+                    dataObject[this.elements[i].dataItemKeyName] = $('#' + this.elements[i].input.id).val().trim();
                     break;
                 case 'DatePicker':
                     dataObject[this.elements[i].dataItemKeyName] = Tools.dateDMYtoYMD($('#' + this.elements[i].input.id).val());
