@@ -388,7 +388,13 @@ class Repository {
         result = await result.text();
         if (result.authorizeUrl)
             window.open(result.authorizeUrl);
-        return JSON.parse(result);
+        else {
+            const parsedResult = Tools.tryParseJSONObject(result);
+            if (parsedResult)
+                return parsedResult;
+            else
+                return result;
+        }
     }
 
     async editItemResponseHandlerNodeJS(item, route) {
