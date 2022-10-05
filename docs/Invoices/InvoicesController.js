@@ -1,5 +1,5 @@
 class InvoicesController {
-    main() {
+    static main() {
         // Hide auth UI, then load client library.
         var view = new InvoicesView();
         $("#authorize-div").hide();

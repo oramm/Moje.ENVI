@@ -1,5 +1,5 @@
 class EntitiesController {
-    main() {
+    static main() {
         // Hide auth UI, then load client library.
         var view = new EntitiesView();
         $("#authorize-div").hide();

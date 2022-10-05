@@ -1,5 +1,5 @@
 class ExternalAchievementsController {
-    main() {
+    static main() {
         // Hide auth UI, then load client library.
         var externalAchievementsView = new ExternalAchievementsView();
         $("#authorize-div").hide();

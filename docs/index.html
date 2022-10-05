@@ -11,6 +11,7 @@
     <link rel="shortcut icon" type="image/png" href="Resources/View/favicon.ico" />
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script src="Tools.js" type="text/javascript"></script>
+    <script src="Gauth-new.js" type="text/javascript"></script>
     <script src="View/FormTools.js" type="text/javascript"></script>
     <script src="View/Popup.js" type="text/javascript"></script>
     <script src="mainWindowView.js" type="text/javascript"></script>
@@ -23,7 +24,6 @@
     <script src="Repository.js" type="text/javascript"></script>
     <script src="MainController.js" type="text/javascript"></script>
 
-    <script src="GAuth2.js" type="text/javascript"></script>
     <title>Moje.ENVI#new</title>
 </head>
 
@@ -59,16 +59,12 @@
 
         <div class="footer-copyright green darken-2">
             <div class="container">
-                © ENVI KONSULTING 2018-2021, Moje ENVI
+                © ENVI KONSULTING 2018-2022, Moje ENVI
                 <a class="grey-text text-lighten-4 right" href="http://www.envi.com.pl">www.envi.com.pl</a>
             </div>
         </div>
     </footer>
-    <script async defer src="https://apis.google.com/js/api.js" onload="this.onload=function(){}; 
-                gAuth = new GAuth2();
-                gAuth.handleClientLoadMainWindow()"
-        onreadystatechange="if (this.readyState === 'complete') this.onload()">
-        </script>
+    <script src="https://accounts.google.com/gsi/client" async defer onload="GAuth.mainWindowInitialise()"></script>
 </body>
 
 </html>

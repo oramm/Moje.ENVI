@@ -1,5 +1,5 @@
 class MainController {
-    async main() {
+    static main() {
         // Hide auth UI, then load client library.
         mainWindowView = new MainWindowView();
         $("#authorize-div").hide();

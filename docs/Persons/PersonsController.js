@@ -1,5 +1,5 @@
 class PersonsController {
-    main() {
+    static main() {
         // Hide auth UI, then load client library.
         var personsView = new PersonsView();
         $("#authorize-div").hide();
