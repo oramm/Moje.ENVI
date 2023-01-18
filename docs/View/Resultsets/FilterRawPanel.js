@@ -5,6 +5,7 @@ class FilterRawPanel extends Resultset {
     constructor(initParamObject) {
         super(initParamObject);
         this.formElements = initParamObject.formElements;
+        this.resultsetData = initParamObject.resultsetData;
         this.createResultset = initParamObject.createResultset;
 
         this.form = new Form("form_" + this.id, "GET", this.formElements, true, 'Filtruj');
@@ -39,9 +40,8 @@ class FilterRawPanel extends Resultset {
 
     }
 
-    /*
-     * Funkcja musi być obsłużona w klasie pochodnej.
-     * Klasa pochodna musi mieć metodę submitTrigger()
+    /** Funkcja musi być obsłużona w klasie pochodnej.
+     *  Klasa pochodna musi mieć metodę submitTrigger()
      */
     setSubmitAction() {
         this.form.$dom.submit((event) => {
@@ -59,9 +59,9 @@ class FilterRawPanel extends Resultset {
         this.form.submitHandler(criteriaParameters)
             .then(() => {
                 if (this.form.validate(criteriaParameters)) {
-                    var promises = [
-                        InvoicesSetup.invoicesRepository.initialiseNodeJS('invoices/?startDate=' + criteriaParameters.startDate + '&endDate=' + criteriaParameters.endDate),
-                        InvoicesSetup.invoiceitemsRepository.initialiseNodeJS('invoiceItems/?startDate=' + criteriaParameters.startDate + '&endDate=' + criteriaParameters.endDate)
+                    const promises = [
+                        this.resultsetData[0].repository.initialiseNodeJS(`${this.resultsetData[0].route}?startDate=${criteriaParameters.startDate}&endDate=${criteriaParameters.endDate}`),
+                        this.resultsetData[1].repository.initialiseNodeJS(`${this.resultsetData[1].route}?startDate=${criteriaParameters.startDate}&endDate=${criteriaParameters.endDate}`)
                     ];
                     Promise.all(promises)
                         .then((res) => {

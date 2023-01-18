@@ -28,7 +28,11 @@ class InvoicesView extends Popup {
                 this.endDateFormElement
             ],
             parentViewObject: this,
-            createResultset: ()=> new InvoicesCollapsible('invoicesCollapsibleMainView')
+            resultsetData: [
+                { repository: InvoicesSetup.invoicesRepository, route: 'invoices/' },
+                { repository: InvoicesSetup.invoiceitemsRepository, route: 'invoiceItems/' }
+            ],
+            createResultset: () => new InvoicesCollapsible('invoicesCollapsibleMainView')
         });
         $('#actionsMenu').append(this.filterRawPanel.$dom)
     }
